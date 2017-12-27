@@ -5,14 +5,18 @@
   
 
   
-  <title>Hexo</title>
+  <title>hexo常用命令 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="安装123npm install hexo -g #安装  npm update hexo -g #升级  hexo init #初始化 简写12345hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot; #新建文章hexo p == hexo publishhexo g == hexo generate#生成hexo s == hexo ser">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo常用命令">
+<meta property="og:url" content="http://yoursite.com/2017/12/27/hexo常用命令/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="安装123npm install hexo -g #安装  npm update hexo -g #升级  hexo init #初始化 简写12345hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot; #新建文章hexo p == hexo publishhexo g == hexo generate#生成hexo s == hexo ser">
+<meta property="og:updated_time" content="2017-12-27T04:23:32.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="hexo常用命令">
+<meta name="twitter:description" content="安装123npm install hexo -g #安装  npm update hexo -g #升级  hexo init #初始化 简写12345hexo n &amp;quot;我的博客&amp;quot; == hexo new &amp;quot;我的博客&amp;quot; #新建文章hexo p == hexo publishhexo g == hexo generate#生成hexo s == hexo ser">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -59,9 +63,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-hexo常用命令" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-hexo常用命令" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/12/27/hexo常用命令/" class="article-date">
   <time datetime="2017-12-27T04:11:02.000Z" itemprop="datePublished">2017-12-27</time>
@@ -74,8 +76,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/hexo常用命令/">hexo常用命令</a>
+    <h1 class="article-title" itemprop="name">
+      hexo常用命令
     </h1>
   
 
@@ -136,12 +138,68 @@
 </tr>
 </tbody>
 </table>
-<h4 id="设置文章摘要"><a href="#设置文章摘要" class="headerlink" title="设置文章摘要"></a>设置文章摘要</h4><p>以上是文章摘要
-        
-          <p class="article-more-link">
-            <a href="/2017/12/27/hexo常用命令/#more">Read More</a>
-          </p>
-        
+<h4 id="设置文章摘要"><a href="#设置文章摘要" class="headerlink" title="设置文章摘要"></a>设置文章摘要</h4><p>以上是文章摘要 <a id="more"></a> 以下是余下全文 </p>
+<h4 id="写作"><a href="#写作" class="headerlink" title="写作"></a>写作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new page &lt;title&gt;</span><br><span class="line">hexo new post &lt;title&gt;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:title</td>
+<td style="text-align:center">标题</td>
+</tr>
+<tr>
+<td>:year</td>
+<td style="text-align:center">建立的年份（4 位数）</td>
+</tr>
+<tr>
+<td>:month</td>
+<td style="text-align:center">建立的月份（2 位数）</td>
+</tr>
+<tr>
+<td>:i_month</td>
+<td style="text-align:center">建立的月份（去掉开头的零）</td>
+</tr>
+<tr>
+<td>:day</td>
+<td style="text-align:center">建立的日期（2 位数）</td>
+</tr>
+<tr>
+<td>:i_day</td>
+<td style="text-align:center">建立的日期（去掉开头的零）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="推送到服务器上"><a href="#推送到服务器上" class="headerlink" title="推送到服务器上"></a>推送到服务器上</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo n #写文章</span><br><span class="line">hexo g #生成</span><br><span class="line">hexo d #部署 #可与hexo g合并为 hexo d -g</span><br></pre></td></tr></table></figure>
+<h4 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h4><p>1.找不到git部署<br>ERROR Deployer not found: git<br>解决方法</p>
+<p>npm install hexo-deployer-git –save</p>
+<p>2.部署类型设置git<br>hexo 3.0 部署类型不再是github，_config.yml 中修改</p>
+<h1 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h1><h2 id="Docs-http-hexo-io-docs-deployment-html"><a href="#Docs-http-hexo-io-docs-deployment-html" class="headerlink" title="Docs: http://hexo.io/docs/deployment.html"></a>Docs: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="noopener">http://hexo.io/docs/deployment.html</a></h2><p>deploy:<br>  type: git<br>  repository: git@<strong><em>.github.com:</em></strong>/<em>*</em>.github.io.git<br>  branch: master</p>
+<ol>
+<li>xcodebuild<br>xcode-select: error: tool ‘xcodebuild’ requires Xcode, but active developer directory ‘/Library/Developer/CommandLineTools’ is a command line tools instance</li>
+</ol>
+<p>npm install bcrypt</p>
+<ol>
+<li>RSS不显示<br>安装RSS插件</li>
+</ol>
+<p>npm install hexo-generator-feed –save</p>
+<h4 id="开启RSS功能"><a href="#开启RSS功能" class="headerlink" title="开启RSS功能"></a>开启RSS功能</h4><p>编辑hexo/_config.yml，添加如下代码：</p>
+<p>rss: /atom.xml #rss地址  默认即可</p>
+<h4 id="开启评论"><a href="#开启评论" class="headerlink" title="开启评论"></a>开启评论</h4><ol>
+<li><p>我使用多说代替自带的评论，在多说 网站注册 &gt; 后台管理 &gt; 添加新站点 &gt; 工具 === 复制通用代码 里面有 short_name</p>
+<ul>
+<li>在根目录 _config.yml 添加一行 disqus_shortname: jslite 是在多说注册时产生的</li>
+<li>复制到 themes\landscape\layout_partial\article.ejs<br>把<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (!index &amp;&amp; post.comments &amp;&amp; config.disqus_shortname)&#123; %&gt;</span><br><span class="line">&lt;section id=&quot;comments&quot;&gt;</span><br><span class="line">&lt;div id=&quot;disqus_thread&quot;&gt;</span><br><span class="line">  &lt;noscript&gt;Please enable JavaScript to view the &lt;a href=&quot;//disqus.com/?ref_noscript&quot;&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (!index &amp;&amp; post.comments &amp;&amp; config.disqus_shortname)&#123; %&gt;</span><br><span class="line">  &lt;section id=&quot;comments&quot;&gt;</span><br><span class="line">    &lt;!-- 多说评论框 start --&gt;</span><br><span class="line">    &lt;div class=&quot;ds-thread&quot; data-thread-key=&quot;&lt;%= post.layout %&gt;-&lt;%= post.slug %&gt;&quot; data-title=&quot;&lt;%= post.title %&gt;&quot; data-url=&quot;&lt;%= page.permalink %&gt;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;!-- 多说评论框 end --&gt;</span><br><span class="line">    &lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    var duoshuoQuery = &#123;short_name:&apos;&lt;%= config.disqus_shortname %&gt;&apos;&#125;;</span><br><span class="line">      (function() &#123;</span><br><span class="line">        var ds = document.createElement(&apos;script&apos;);</span><br><span class="line">        ds.type = &apos;text/javascript&apos;;ds.async = true;</span><br><span class="line">        ds.src = (document.location.protocol == &apos;https:&apos; ? &apos;https:&apos; : &apos;http:&apos;) + &apos;//static.duoshuo.com/embed.js&apos;;</span><br><span class="line">        ds.charset = &apos;UTF-8&apos;;</span><br><span class="line">        (document.getElementsByTagName(&apos;head&apos;)[0] </span><br><span class="line">         || document.getElementsByTagName(&apos;body&apos;)[0]).appendChild(ds);</span><br><span class="line">      &#125;)();</span><br><span class="line">      &lt;/script&gt;</span><br><span class="line">    &lt;!-- 多说公共JS代码 end --&gt;</span><br><span class="line">  &lt;/section&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     <footer class="article-footer">
@@ -151,56 +209,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/27/hello-world/" class="article-date">
-  <time datetime="2017-12-27T02:47:53.506Z" itemprop="datePublished">2017-12-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/hello-world/">Hello World</a>
-    </h1>
+    <a href="/2017/12/27/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/hello-world/" data-id="cjbok365700009c5ian8543y2" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
