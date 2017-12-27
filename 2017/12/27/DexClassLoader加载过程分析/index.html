@@ -70,6 +70,8 @@
 <div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
 <![endif]-->
 
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
 <body>
     <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
     <div class="main-header-box">
@@ -96,7 +98,7 @@
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="menu">
                         
-                            <li role="presentation"><a href="/"><i class="fa fa-fw /favicon.ico"></i>首页</a>
+                            <li role="presentation"><a href="/"><i class="fa fa-fw /favicon.ico"></i>Home</a>
                             </li>
                         
                             <li role="presentation"><a href="/categories/前端/"><i class="fa fa-fw /favicon.ico"></i>前端</a>
@@ -160,22 +162,590 @@
     
     <div class="post-body post-content">
         <p>在动态加载dex时，均采用的是DexClassLoader类进行加载，网上也有很多对如何加载进行分析的，现结合Android5.1源码进行分析。</p>
-<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>先来看一个实例，实例完成动态加载SD卡上的一个jar包，在jar包中Toast一段话。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ToastTest &#123;</span><br><span class="line">    private Context context;</span><br><span class="line">    public ToastTest(Context context)&#123;</span><br><span class="line">        this.context = context;</span><br><span class="line">    &#125;</span><br><span class="line">    public void call() &#123;</span><br><span class="line">        Toast.makeText(context, &quot;call method&quot;, 0).show();</span><br><span class="line">    &#125;</span><br><span class="line">    public String getData() &#123;</span><br><span class="line">        return &quot;ToastTest&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>将这个Java类打包生成test.jar包，然后放到SD目录下，然后利用DexClassLoader动态加载该jar包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends Activity &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        File file = new File(Environment.getExternalStorageDirectory()</span><br><span class="line">                .toString() + File.separator + &quot;test.jar&quot;);</span><br><span class="line">        final File optimizedDexOutputPath = getDir(&quot;temp&quot;, Context.MODE_PRIVATE);</span><br><span class="line">        /*</span><br><span class="line">         * Parameters</span><br><span class="line">         * dexPath    需要装载的APK或者Jar文件的路径。包含多个路径用File.pathSeparator间隔开,在Android上默认是 &quot;:&quot; </span><br><span class="line">         * optimizedDirectory    优化后的dex文件存放目录，不能为null</span><br><span class="line">         * libraryPath    目标类中使用的C/C++库的列表,每个目录用File.pathSeparator间隔开; 可以为 null</span><br><span class="line">         * parent    该类装载器的父装载器，一般用当前执行类的装载器</span><br><span class="line">         */</span><br><span class="line">        new DexClassLoader(file.getAbsolutePath(),</span><br><span class="line">                optimizedDexOutputPath.getAbsolutePath(), null,</span><br><span class="line">                getClassLoader());</span><br><span class="line">          //利用反射原理去调用</span><br><span class="line">      try &#123;</span><br><span class="line">            Class&lt;?&gt; testClass = classLoader.loadClass(&quot;com.demo.ToastTest&quot;);</span><br><span class="line">            Constructor&lt;?&gt; istructor = testClass.getConstructor(Context.class);</span><br><span class="line">            Method method = iclass.getMethod(&quot;call&quot;, null);</span><br><span class="line">            String data = (String) method.invoke(istructor.newInstance(this), null);</span><br><span class="line">            //System.out.println(data);</span><br><span class="line">            Log.d(&quot;ToastTest&quot;,data);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>先来看一个实例，实例完成动态加载SD卡上的一个jar包，在jar包中Toast一段话。</p>
+<pre><code class="java">public class ToastTest {
+    private Context context;
+    public ToastTest(Context context){
+        this.context = context;
+    }
+    public void call() {
+        Toast.makeText(context, &quot;call method&quot;, 0).show();
+    }
+    public String getData() {
+        return &quot;ToastTest&quot;;
+    }
+}
+</code></pre>
+<p>将这个Java类打包生成test.jar包，然后放到SD目录下，然后利用DexClassLoader动态加载该jar包。</p>
+<pre><code class="java">public class MainActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        File file = new File(Environment.getExternalStorageDirectory()
+                .toString() + File.separator + &quot;test.jar&quot;);
+        final File optimizedDexOutputPath = getDir(&quot;temp&quot;, Context.MODE_PRIVATE);
+        /*
+         * Parameters
+         * dexPath    需要装载的APK或者Jar文件的路径。包含多个路径用File.pathSeparator间隔开,在Android上默认是 &quot;:&quot; 
+         * optimizedDirectory    优化后的dex文件存放目录，不能为null
+         * libraryPath    目标类中使用的C/C++库的列表,每个目录用File.pathSeparator间隔开; 可以为 null
+         * parent    该类装载器的父装载器，一般用当前执行类的装载器
+         */
+        new DexClassLoader(file.getAbsolutePath(),
+                optimizedDexOutputPath.getAbsolutePath(), null,
+                getClassLoader());
+          //利用反射原理去调用
+      try {
+            Class&lt;?&gt; testClass = classLoader.loadClass(&quot;com.demo.ToastTest&quot;);
+            Constructor&lt;?&gt; istructor = testClass.getConstructor(Context.class);
+            Method method = iclass.getMethod(&quot;call&quot;, null);
+            String data = (String) method.invoke(istructor.newInstance(this), null);
+            //System.out.println(data);
+            Log.d(&quot;ToastTest&quot;,data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
 <p>上面代码<code>new DexClassLoader(file.getAbsolutePath(),optimizedDexOutputPath.getAbsolutePath(), null, getClassLoader());</code>完成了jar包的加载，下面从该步骤开始分析DexClassLoader是如何加载一个jar包或者dex的。</p>
-<h4 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h4><p>DexClassLoader类文件在\libcore\dalvik\src\main\java\dalvik\system\ DexClassLoader.java文件下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public class DexClassLoader extends BaseDexClassLoader &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Creates a &#123;@code DexClassLoader&#125; that finds interpreted and native</span><br><span class="line">     * code.  Interpreted classes are found in a set of DEX files contained</span><br><span class="line">     * in Jar or APK files.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;The path lists are separated using the character specified by the</span><br><span class="line">     * &#123;@code path.separator&#125; system property, which defaults to &#123;@code :&#125;.</span><br><span class="line">     *</span><br><span class="line">     * @param dexPath the list of jar/apk files containing classes and</span><br><span class="line">     *     resources, delimited by &#123;@code File.pathSeparator&#125;, which</span><br><span class="line">     *     defaults to &#123;@code &quot;:&quot;&#125; on Android</span><br><span class="line">     * @param optimizedDirectory directory where optimized dex files</span><br><span class="line">     *     should be written; must not be &#123;@code null&#125;</span><br><span class="line">     * @param libraryPath the list of directories containing native</span><br><span class="line">     *     libraries, delimited by &#123;@code File.pathSeparator&#125;; may be</span><br><span class="line">     *     &#123;@code null&#125;</span><br><span class="line">     * @param parent the parent class loader</span><br><span class="line">     */</span><br><span class="line">    public DexClassLoader(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, new File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>代码很简单，直接调用了父类的构造方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class BaseDexClassLoader extends ClassLoader &#123;</span><br><span class="line">    private final DexPathList pathList;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Constructs an instance.</span><br><span class="line">     *</span><br><span class="line">     * @param dexPath the list of jar/apk files containing classes and</span><br><span class="line">     * resources, delimited by &#123;@code File.pathSeparator&#125;, which</span><br><span class="line">     * defaults to &#123;@code &quot;:&quot;&#125; on Android</span><br><span class="line">     * @param optimizedDirectory directory where optimized dex files</span><br><span class="line">     * should be written; may be &#123;@code null&#125;</span><br><span class="line">     * @param libraryPath the list of directories containing native</span><br><span class="line">     * libraries, delimited by &#123;@code File.pathSeparator&#125;; may be</span><br><span class="line">     * &#123;@code null&#125;</span><br><span class="line">     * @param parent the parent class loader</span><br><span class="line">     */</span><br><span class="line">    public BaseDexClassLoader(String dexPath, File optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent) &#123;</span><br><span class="line">        super(parent);</span><br><span class="line">        this.pathList = new DexPathList(this, dexPath, libraryPath, optimizedDirectory);</span><br><span class="line">    &#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>父类构造函数也很简单，首先调用了它自己的父类构造函数，然后new DaxPathList。下面先分析下DexPathList的构造函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Constructs an instance.</span><br><span class="line">     *</span><br><span class="line">     * @param definingContext the context in which any as-yet unresolved</span><br><span class="line">     * classes should be defined</span><br><span class="line">     * @param dexPath list of dex/resource path elements, separated by</span><br><span class="line">     * &#123;@code File.pathSeparator&#125;</span><br><span class="line">     * @param libraryPath list of native library directory path elements,</span><br><span class="line">     * separated by &#123;@code File.pathSeparator&#125;</span><br><span class="line">     * @param optimizedDirectory directory where optimized &#123;@code .dex&#125; files</span><br><span class="line">     * should be found and written to, or &#123;@code null&#125; to use the default</span><br><span class="line">     * system directory for same</span><br><span class="line">     */</span><br><span class="line">    public DexPathList(ClassLoader definingContext, String dexPath,</span><br><span class="line">            String libraryPath, File optimizedDirectory) &#123;</span><br><span class="line">        if (definingContext == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;definingContext == null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (dexPath == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;dexPath == null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (optimizedDirectory != null) &#123;</span><br><span class="line">            if (!optimizedDirectory.exists())  &#123;</span><br><span class="line">                throw new IllegalArgumentException(</span><br><span class="line">                        &quot;optimizedDirectory doesn&apos;t exist: &quot;</span><br><span class="line">                        + optimizedDirectory);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (!(optimizedDirectory.canRead()</span><br><span class="line">                            &amp;&amp; optimizedDirectory.canWrite())) &#123;</span><br><span class="line">                throw new IllegalArgumentException(</span><br><span class="line">                        &quot;optimizedDirectory not readable/writable: &quot;</span><br><span class="line">                        + optimizedDirectory);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">		//前面做了一些检查和异常处理</span><br><span class="line">        this.definingContext = definingContext;</span><br><span class="line">        ArrayList&lt;IOException&gt; suppressedExceptions = new ArrayList&lt;IOException&gt;();</span><br><span class="line">        this.dexElements = makeDexElements(splitDexPath(dexPath), optimizedDirectory,</span><br><span class="line">                                           suppressedExceptions);</span><br><span class="line">        if (suppressedExceptions.size() &gt; 0) &#123;</span><br><span class="line">            this.dexElementsSuppressedExceptions =</span><br><span class="line">                suppressedExceptions.toArray(new IOException[suppressedExceptions.size()]);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            dexElementsSuppressedExceptions = null;</span><br><span class="line">        &#125;</span><br><span class="line">        this.nativeLibraryDirectories = splitLibraryPath(libraryPath);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中关键代码是makeDexElements<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Makes an array of dex/resource path elements, one per element of</span><br><span class="line">     * the given array.</span><br><span class="line">     */</span><br><span class="line">    private static Element[] makeDexElements(ArrayList&lt;File&gt; files, File optimizedDirectory,</span><br><span class="line">                                             ArrayList&lt;IOException&gt; suppressedExceptions) &#123;</span><br><span class="line">        ArrayList&lt;Element&gt; elements = new ArrayList&lt;Element&gt;();</span><br><span class="line">        /*</span><br><span class="line">         * Open all files and load the (direct or contained) dex files</span><br><span class="line">         * up front.</span><br><span class="line">         */</span><br><span class="line">        for (File file : files) &#123;</span><br><span class="line">            File zip = null;</span><br><span class="line">            DexFile dex = null;</span><br><span class="line">            String name = file.getName();</span><br><span class="line">			//对每个文件进行处理</span><br><span class="line">            if (file.isDirectory()) &#123;</span><br><span class="line">            //如果是文件直接加入到elements中</span><br><span class="line">                // We support directories for looking up resources.</span><br><span class="line">                // This is only useful for running libcore tests.</span><br><span class="line">                elements.add(new Element(file, true, null, null));</span><br><span class="line">            &#125; else if (file.isFile())&#123;</span><br><span class="line">                if (name.endsWith(DEX_SUFFIX)) &#123;//是dex</span><br><span class="line">                    // Raw dex file (not inside a zip/jar).</span><br><span class="line">                    try &#123;</span><br><span class="line">                        dex = loadDexFile(file, optimizedDirectory);</span><br><span class="line">                    &#125; catch (IOException ex) &#123;</span><br><span class="line">                        System.logE(&quot;Unable to load dex file: &quot; + file, ex);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; else &#123;//不是dex。即是压缩文件：jar zip apk</span><br><span class="line">                    zip = file;</span><br><span class="line">                    try &#123;</span><br><span class="line">                        dex = loadDexFile(file, optimizedDirectory);</span><br><span class="line">                    &#125; catch (IOException suppressed) &#123;</span><br><span class="line">                        /*</span><br><span class="line">                         * IOException might get thrown &quot;legitimately&quot; by the DexFile constructor if</span><br><span class="line">                         * the zip file turns out to be resource-only (that is, no classes.dex file</span><br><span class="line">                         * in it).</span><br><span class="line">                         * Let dex == null and hang on to the exception to add to the tea-leaves for</span><br><span class="line">                         * when findClass returns null.</span><br><span class="line">                         */</span><br><span class="line">                        suppressedExceptions.add(suppressed);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                System.logW(&quot;ClassLoader referenced unknown path: &quot; + file);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if ((zip != null) || (dex != null)) &#123;</span><br><span class="line">                elements.add(new Element(file, false, zip, dex));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return elements.toArray(new Element[elements.size()]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>先看DexPathList内部是如何解析dex文件的，即分析loadDexFile代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Constructs a &#123;@code DexFile&#125; instance, as appropriate depending</span><br><span class="line"> * on whether &#123;@code optimizedDirectory&#125; is &#123;@code null&#125;.</span><br><span class="line"> */</span><br><span class="line">private static DexFile loadDexFile(File file, File optimizedDirectory)</span><br><span class="line">        throws IOException &#123;</span><br><span class="line">    if (optimizedDirectory == null) &#123;</span><br><span class="line">        return new DexFile(file);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        String optimizedPath = optimizedPathFor(file, optimizedDirectory);</span><br><span class="line">        return DexFile.loadDex(file.getPath(), optimizedPath, 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>如果被优化后的路径是空，那么直接返回new DexFile(file)。optimizedPathFor是判断优化路径，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * Converts a dex/jar file path and an output directory to an</span><br><span class="line">    * output file path for an associated optimized dex file.</span><br><span class="line">    */</span><br><span class="line">   private static String optimizedPathFor(File path,</span><br><span class="line">           File optimizedDirectory) &#123;</span><br><span class="line">       /*</span><br><span class="line">        * Get the filename component of the path, and replace the</span><br><span class="line">        * suffix with &quot;.dex&quot; if that&apos;s not already the suffix.</span><br><span class="line">        *</span><br><span class="line">        * We don&apos;t want to use &quot;.odex&quot;, because the build system uses</span><br><span class="line">        * that for files that are paired with resource-only jar</span><br><span class="line">        * files. If the VM can assume that there&apos;s no classes.dex in</span><br><span class="line">        * the matching jar, it doesn&apos;t need to open the jar to check</span><br><span class="line">        * for updated dependencies, providing a slight performance</span><br><span class="line">        * boost at startup. The use of &quot;.dex&quot; here matches the use on</span><br><span class="line">        * files in /data/dalvik-cache.</span><br><span class="line">        */</span><br><span class="line">       String fileName = path.getName();</span><br><span class="line">       if (!fileName.endsWith(DEX_SUFFIX)) &#123;</span><br><span class="line">           int lastDot = fileName.lastIndexOf(&quot;.&quot;);</span><br><span class="line">           if (lastDot &lt; 0) &#123;</span><br><span class="line">               fileName += DEX_SUFFIX;</span><br><span class="line">           &#125; else &#123;</span><br><span class="line">               StringBuilder sb = new StringBuilder(lastDot + 4);</span><br><span class="line">               sb.append(fileName, 0, lastDot);</span><br><span class="line">               sb.append(DEX_SUFFIX);</span><br><span class="line">               fileName = sb.toString();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       File result = new File(optimizedDirectory, fileName);</span><br><span class="line">       return result.getPath();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<p>真正执行代码优化的是DexFile.loadDex，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Open a DEX file, specifying the file in which the optimized DEX</span><br><span class="line">     * data should be written.  If the optimized form exists and appears</span><br><span class="line">     * to be current, it will be used; if not, the VM will attempt to</span><br><span class="line">     * regenerate it.</span><br><span class="line">     *</span><br><span class="line">     * This is intended for use by applications that wish to download</span><br><span class="line">     * and execute DEX files outside the usual application installation</span><br><span class="line">     * mechanism.  This function should not be called directly by an</span><br><span class="line">     * application; instead, use a class loader such as</span><br><span class="line">     * dalvik.system.DexClassLoader.</span><br><span class="line">     *</span><br><span class="line">     * @param sourcePathName</span><br><span class="line">     *  Jar or APK file with &quot;classes.dex&quot;.  (May expand this to include</span><br><span class="line">     *  &quot;raw DEX&quot; in the future.)</span><br><span class="line">     * @param outputPathName</span><br><span class="line">     *  File that will hold the optimized form of the DEX data.</span><br><span class="line">     * @param flags</span><br><span class="line">     *  Enable optional features.  (Currently none defined.)</span><br><span class="line">     * @return</span><br><span class="line">     *  A new or previously-opened DexFile.</span><br><span class="line">     * @throws IOException</span><br><span class="line">     *  If unable to open the source or output file.</span><br><span class="line">     */</span><br><span class="line">    static public DexFile loadDex(String sourcePathName, String outputPathName,</span><br><span class="line">        int flags) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">        /*</span><br><span class="line">         * TODO: we may want to cache previously-opened DexFile objects.</span><br><span class="line">         * The cache would be synchronized with close().  This would help</span><br><span class="line">         * us avoid mapping the same DEX more than once when an app</span><br><span class="line">         * decided to open it multiple times.  In practice this may not</span><br><span class="line">         * be a real issue.</span><br><span class="line">         */</span><br><span class="line">        return new DexFile(sourcePathName, outputPathName, flags);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>也就是直接返回了DexFile，下面看看DexFile构造函数做了哪些事情：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * Opens a DEX file from a given filename, using a specified file</span><br><span class="line">    * to hold the optimized data.</span><br><span class="line">    *</span><br><span class="line">    * @param sourceName</span><br><span class="line">    *  Jar or APK file with &quot;classes.dex&quot;.</span><br><span class="line">    * @param outputName</span><br><span class="line">    *  File that will hold the optimized form of the DEX data.</span><br><span class="line">    * @param flags</span><br><span class="line">    *  Enable optional features.</span><br><span class="line">    */</span><br><span class="line">   private DexFile(String sourceName, String outputName, int flags) throws IOException &#123;</span><br><span class="line">       if (outputName != null) &#123;</span><br><span class="line">           try &#123;</span><br><span class="line">               String parent = new File(outputName).getParent();</span><br><span class="line">               if (Libcore.os.getuid() != Libcore.os.stat(parent).st_uid) &#123;</span><br><span class="line">                   throw new IllegalArgumentException(&quot;Optimized data directory &quot; + parent</span><br><span class="line">                           + &quot; is not owned by the current user. Shared storage cannot protect&quot;</span><br><span class="line">                           + &quot; your application from code injection attacks.&quot;);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; catch (ErrnoException ignored) &#123;</span><br><span class="line">               // assume we&apos;ll fail with a more contextual error later</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">	//前面是异常判断</span><br><span class="line">       mCookie = openDexFile(sourceName, outputName, flags);</span><br><span class="line">       mFileName = sourceName;</span><br><span class="line">       guard.open(&quot;close&quot;);</span><br><span class="line">       //System.out.println(&quot;DEX FILE cookie is &quot; + mCookie + &quot; sourceName=&quot; + sourceName + &quot; outputName=&quot; + outputName);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<p>关键代码:openDexFile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * Open a DEX file.  The value returned is a magic VM cookie.  On</span><br><span class="line"> * failure, an IOException is thrown.</span><br><span class="line"> */</span><br><span class="line">private static long openDexFile(String sourceName, String outputName, int flags) throws IOException &#123;</span><br><span class="line">    // Use absolute paths to enable the use of relative paths when testing on host.</span><br><span class="line">    return openDexFileNative(new File(sourceName).getAbsolutePath(),</span><br><span class="line">                             (outputName == null) ? null : new File(outputName).getAbsolutePath(),</span><br><span class="line">                             flags);</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> * Open a DEX file.  The value returned is a magic VM cookie.  On</span><br><span class="line"> * failure, an IOException is thrown.</span><br><span class="line"> */</span><br><span class="line">private static native long openDexFileNative(String sourceName, String outputName, int flags);</span><br></pre></td></tr></table></figure></p>
-<p>这里也就直接调用了native方法进行优化。继续跟进代码在\dalvik\vm\native\dalvik_system_DexFile.cpp文件中的openDexFileNative() 函数，接下重点就在这个函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">static void Dalvik_dalvik_system_DexFile_openDexFileNative(const u4* args,</span><br><span class="line">    JValue* pResult)</span><br><span class="line">&#123;</span><br><span class="line">//args[0]: sourceName java层传入的</span><br><span class="line">//args[1]: outputName    </span><br><span class="line">    StringObject* sourceNameObj = (StringObject*) args[0];</span><br><span class="line">    StringObject* outputNameObj = (StringObject*) args[1];</span><br><span class="line">    DexOrJar* pDexOrJar = NULL;</span><br><span class="line">    JarFile* pJarFile;</span><br><span class="line">RawDexFile* pRawDexFile;</span><br><span class="line">//DexOrJar*  JarFile*   RawDexFile* 目录</span><br><span class="line">    char* sourceName;</span><br><span class="line">    char* outputName;</span><br><span class="line">    //……</span><br><span class="line">    sourceName = dvmCreateCstrFromString(sourceNameObj);</span><br><span class="line">    if (outputNameObj != NULL)</span><br><span class="line">        outputName = dvmCreateCstrFromString(outputNameObj);</span><br><span class="line">    else</span><br><span class="line">        outputName = NULL;</span><br><span class="line">/*判断要加载的dex是否为系统中的dex文件</span><br><span class="line">* gDvm ？？？</span><br><span class="line">*/</span><br><span class="line">    if (dvmClassPathContains(gDvm.bootClassPath, sourceName)) &#123;</span><br><span class="line">        ALOGW(&quot;Refusing to reopen boot DEX &apos;%s&apos;&quot;, sourceName);</span><br><span class="line">        dvmThrowIOException(</span><br><span class="line">            &quot;Re-opening BOOTCLASSPATH DEX files is not allowed&quot;);</span><br><span class="line">        free(sourceName);</span><br><span class="line">        free(outputName);</span><br><span class="line">        RETURN_VOID();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line">     * Try to open it directly as a DEX if the name ends with &quot;.dex&quot;.</span><br><span class="line">     * If that fails (or isn&apos;t tried in the first place), try it as a</span><br><span class="line">     * Zip with a &quot;classes.dex&quot; inside.</span><br><span class="line">     */</span><br><span class="line">    //判断sourcename扩展名是否是.dex</span><br><span class="line">    if (hasDexExtension(sourceName)</span><br><span class="line">            &amp;&amp; dvmRawDexFileOpen(sourceName, outputName, &amp;pRawDexFile, false) == 0) &#123;</span><br><span class="line">        ALOGV(&quot;Opening DEX file &apos;%s&apos; (DEX)&quot;, sourceName);</span><br><span class="line">        pDexOrJar = (DexOrJar*) malloc(sizeof(DexOrJar));</span><br><span class="line">        pDexOrJar-&gt;isDex = true;</span><br><span class="line">        pDexOrJar-&gt;pRawDexFile = pRawDexFile;</span><br><span class="line">        pDexOrJar-&gt;pDexMemory = NULL;</span><br><span class="line">    //.jar文件</span><br><span class="line">    &#125; else if (dvmJarFileOpen(sourceName, outputName, &amp;pJarFile, false) == 0) &#123;</span><br><span class="line">        ALOGV(&quot;Opening DEX file &apos;%s&apos; (Jar)&quot;, sourceName);</span><br><span class="line">        pDexOrJar = (DexOrJar*) malloc(sizeof(DexOrJar));</span><br><span class="line">        pDexOrJar-&gt;isDex = false;</span><br><span class="line">        pDexOrJar-&gt;pJarFile = pJarFile;</span><br><span class="line">        pDexOrJar-&gt;pDexMemory = NULL;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">//都不满足，抛出异常</span><br><span class="line">        ALOGV(&quot;Unable to open DEX file &apos;%s&apos;&quot;, sourceName);</span><br><span class="line">        dvmThrowIOException(&quot;unable to open DEX file&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">if (pDexOrJar != NULL) &#123;</span><br><span class="line">        pDexOrJar-&gt;fileName = sourceName;</span><br><span class="line">    //把pDexOr这个结构体中的内容加到gDvm中的userDexFile结构的hash表中，便于Dalvik以后的查找</span><br><span class="line">        addToDexFileTable(pDexOrJar);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        free(sourceName);</span><br><span class="line">    &#125;</span><br><span class="line">    free(outputName);</span><br><span class="line">    RETURN_PTR(pDexOrJar);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>再看对.dex文件的处理函数dvmRawDexFileOpen（\dalvik\vm\RawDexFile.cpp）的处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">/* See documentation comment in header. */</span><br><span class="line">int dvmRawDexFileOpen(const char* fileName, const char* odexOutputName,</span><br><span class="line">    RawDexFile** ppRawDexFile, bool isBootstrap)</span><br><span class="line">&#123;</span><br><span class="line">    DvmDex* pDvmDex = NULL;</span><br><span class="line">    char* cachedName = NULL;</span><br><span class="line">    int result = -1;</span><br><span class="line">    int dexFd = -1;</span><br><span class="line">    int optFd = -1;</span><br><span class="line">    u4 modTime = 0;</span><br><span class="line">    u4 adler32 = 0;</span><br><span class="line">    size_t fileSize = 0;</span><br><span class="line">    bool newFile = false;</span><br><span class="line">    bool locked = false;</span><br><span class="line">    dexFd = open(fileName, O_RDONLY);  //打开dex文件</span><br><span class="line">    if (dexFd &lt; 0) goto bail;</span><br><span class="line">    /* If we fork/exec into dexopt, don&apos;t let it inherit the open fd. */</span><br><span class="line">dvmSetCloseOnExec(dexFd);//dexfd不继承</span><br><span class="line">//校验dex文件的标志，将第8字节开始的4个字节赋值给adler32。</span><br><span class="line">    if (verifyMagicAndGetAdler32(dexFd, &amp;adler32) &lt; 0) &#123;</span><br><span class="line">        ALOGE(&quot;Error with header for %s&quot;, fileName);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">    //得到dex文件的大小和修改时间，保存在modTime和filesize中</span><br><span class="line">    if (getModTimeAndSize(dexFd, &amp;modTime, &amp;fileSize) &lt; 0) &#123;</span><br><span class="line">        ALOGE(&quot;Error with stat for %s&quot;, fileName);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //odexOutputName就是odex文件名，如果odexOutputName为空，则自动生成一个。</span><br><span class="line">    if (odexOutputName == NULL) &#123;</span><br><span class="line">        cachedName = dexOptGenerateCacheFileName(fileName, NULL);</span><br><span class="line">        if (cachedName == NULL)</span><br><span class="line">            goto bail;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        cachedName = strdup(odexOutputName);   </span><br><span class="line">    &#125;</span><br><span class="line">    //主要是验证缓存文件名的正确性，之后将dexOptHeader结构写入fd中</span><br><span class="line">    optFd = dvmOpenCachedDexFile(fileName, cachedName, modTime,</span><br><span class="line">        adler32, isBootstrap, &amp;newFile, /*createIfMissing=*/true);</span><br><span class="line">    locked = true;</span><br><span class="line">  </span><br><span class="line">    if (newFile) &#123;</span><br><span class="line">        u8 startWhen, copyWhen, endWhen;</span><br><span class="line">        bool result;</span><br><span class="line">        off_t dexOffset;</span><br><span class="line">        dexOffset = lseek(optFd, 0, SEEK_CUR);  //文件指针的位置</span><br><span class="line">        result = (dexOffset &gt; 0);</span><br><span class="line">        if (result) &#123;</span><br><span class="line">            startWhen = dvmGetRelativeTimeUsec();</span><br><span class="line">    //将dex文件中的内容拷贝到当前odex文件，也就是dexOffset开始</span><br><span class="line">            result = copyFileToFile(optFd, dexFd, fileSize) == 0;</span><br><span class="line">            copyWhen = dvmGetRelativeTimeUsec();</span><br><span class="line">        &#125;</span><br><span class="line">        if (result) &#123;</span><br><span class="line">    //优化odex文件</span><br><span class="line">            result = dvmOptimizeDexFile(optFd, dexOffset, fileSize,</span><br><span class="line">                fileName, modTime, adler32, isBootstrap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    /*</span><br><span class="line">     * Map the cached version.  This immediately rewinds the fd, so it</span><br><span class="line">     * doesn&apos;t have to be seeked anywhere in particular.</span><br><span class="line">     */</span><br><span class="line">//将odex文件映射到内存空间(mmap)，并用mprotect将属性置为只读属性，并将映射的dex结构放在pDvmDex数据结构中，具体代码在下面。</span><br><span class="line">    if (dvmDexFileOpenFromFd(optFd, &amp;pDvmDex) != 0) &#123;</span><br><span class="line">        ALOGI(&quot;Unable to map cached %s&quot;, fileName);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//Dalvik/vm/RewDexFile.cpp</span><br><span class="line">static int verifyMagicAndGetAdler32(int fd, u4 *adler32)</span><br><span class="line">&#123;</span><br><span class="line">    u1 headerStart[12];</span><br><span class="line">    ssize_t amt = read(fd, headerStart, sizeof(headerStart));</span><br><span class="line">    if (amt &lt; 0) &#123;</span><br><span class="line">        ALOGE(&quot;Unable to read header: %s&quot;, strerror(errno));</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if (amt != sizeof(headerStart)) &#123;</span><br><span class="line">        ALOGE(&quot;Unable to read full header (only got %d bytes)&quot;, (int) amt);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!dexHasValidMagic((DexHeader*) (void*) headerStart)) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    *adler32 = (u4) headerStart[8]</span><br><span class="line">        | (((u4) headerStart[9]) &lt;&lt; 8)</span><br><span class="line">        | (((u4) headerStart[10]) &lt;&lt; 16)</span><br><span class="line">        | (((u4) headerStart[11]) &lt;&lt; 24);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">//dalvik\vm\DvmDex.cpp</span><br><span class="line">/*</span><br><span class="line"> * Given an open optimized DEX file, map it into read-only shared memory and</span><br><span class="line"> * parse the contents.</span><br><span class="line"> *</span><br><span class="line"> * Returns nonzero on error.</span><br><span class="line"> */</span><br><span class="line">int dvmDexFileOpenFromFd(int fd, DvmDex** ppDvmDex)</span><br><span class="line">&#123;</span><br><span class="line">    DvmDex* pDvmDex;</span><br><span class="line">    DexFile* pDexFile;</span><br><span class="line">    MemMapping memMap;</span><br><span class="line">    int parseFlags = kDexParseDefault;</span><br><span class="line">    int result = -1;</span><br><span class="line"></span><br><span class="line">    if (gDvm.verifyDexChecksum)</span><br><span class="line">        parseFlags |= kDexParseVerifyChecksum;</span><br><span class="line">    if (lseek(fd, 0, SEEK_SET) &lt; 0) &#123;</span><br><span class="line">        ALOGE(&quot;lseek rewind failed&quot;);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">    //mmap映射fd文件,就是我们之前的odex文件</span><br><span class="line">   if (sysMapFileInShmemWritableReadOnly(fd, &amp;memMap) != 0) &#123;</span><br><span class="line">        ALOGE(&quot;Unable to map file&quot;);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">    pDexFile = dexFileParse((u1*)memMap.addr, memMap.length, parseFlags);</span><br><span class="line">    if (pDexFile == NULL) &#123;</span><br><span class="line">        ALOGE(&quot;DEX parse failed&quot;);</span><br><span class="line">        sysReleaseShmem(&amp;memMap);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">    pDvmDex = allocateAuxStructures(pDexFile);</span><br><span class="line">    if (pDvmDex == NULL) &#123;</span><br><span class="line">        dexFileFree(pDexFile);</span><br><span class="line">        sysReleaseShmem(&amp;memMap);</span><br><span class="line">        goto bail;</span><br><span class="line">    &#125;</span><br><span class="line">/* tuck this into the DexFile so it gets released later */</span><br><span class="line">//将映射odex文件的内存拷贝到DvmDex的结构中</span><br><span class="line">    sysCopyMap(&amp;pDvmDex-&gt;memMap, &amp;memMap);</span><br><span class="line">    pDvmDex-&gt;isMappedReadOnly = true;</span><br><span class="line">    *ppDvmDex = pDvmDex;</span><br><span class="line">    result = 0;</span><br><span class="line"></span><br><span class="line">bail:</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/*dalvik\libdex\SysUtil.cpp</span><br><span class="line">*/</span><br><span class="line">int sysMapFileInShmemWritableReadOnly(int fd, MemMapping* pMap)</span><br><span class="line">&#123;</span><br><span class="line">    off_t start;</span><br><span class="line">    size_t length;</span><br><span class="line">    void* memPtr;</span><br><span class="line">assert(pMap != NULL);</span><br><span class="line">//获得文件长度和文件开始地址</span><br><span class="line">    if (getFileStartAndLength(fd, &amp;start, &amp;length) &lt; 0)</span><br><span class="line">        return -1;</span><br><span class="line">//映射文件</span><br><span class="line">    memPtr = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_FILE | MAP_PRIVATE,</span><br><span class="line">            fd, start);</span><br><span class="line">    //……</span><br><span class="line">//将保护属性置为只读属性</span><br><span class="line">    if (mprotect(memPtr, length, PROT_READ) &lt; 0) &#123;</span><br><span class="line">      //…….</span><br><span class="line">    &#125;</span><br><span class="line">    pMap-&gt;baseAddr = pMap-&gt;addr = memPtr;</span><br><span class="line">    pMap-&gt;baseLength = pMap-&gt;length = length;</span><br><span class="line">return 0;</span><br><span class="line">//……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h4><p>DexClassLoader类文件在\libcore\dalvik\src\main\java\dalvik\system\ DexClassLoader.java文件下</p>
+<pre><code class="java">public class DexClassLoader extends BaseDexClassLoader {
+    /**
+     * Creates a {@code DexClassLoader} that finds interpreted and native
+     * code.  Interpreted classes are found in a set of DEX files contained
+     * in Jar or APK files.
+     *
+     * &lt;p&gt;The path lists are separated using the character specified by the
+     * {@code path.separator} system property, which defaults to {@code :}.
+     *
+     * @param dexPath the list of jar/apk files containing classes and
+     *     resources, delimited by {@code File.pathSeparator}, which
+     *     defaults to {@code &quot;:&quot;} on Android
+     * @param optimizedDirectory directory where optimized dex files
+     *     should be written; must not be {@code null}
+     * @param libraryPath the list of directories containing native
+     *     libraries, delimited by {@code File.pathSeparator}; may be
+     *     {@code null}
+     * @param parent the parent class loader
+     */
+    public DexClassLoader(String dexPath, String optimizedDirectory,
+            String libraryPath, ClassLoader parent) {
+        super(dexPath, new File(optimizedDirectory), libraryPath, parent);
+    }
+}
+</code></pre>
+<p>代码很简单，直接调用了父类的构造方法。</p>
+<pre><code class="java">public class BaseDexClassLoader extends ClassLoader {
+    private final DexPathList pathList;
+
+    /**
+     * Constructs an instance.
+     *
+     * @param dexPath the list of jar/apk files containing classes and
+     * resources, delimited by {@code File.pathSeparator}, which
+     * defaults to {@code &quot;:&quot;} on Android
+     * @param optimizedDirectory directory where optimized dex files
+     * should be written; may be {@code null}
+     * @param libraryPath the list of directories containing native
+     * libraries, delimited by {@code File.pathSeparator}; may be
+     * {@code null}
+     * @param parent the parent class loader
+     */
+    public BaseDexClassLoader(String dexPath, File optimizedDirectory,
+            String libraryPath, ClassLoader parent) {
+        super(parent);
+        this.pathList = new DexPathList(this, dexPath, libraryPath, optimizedDirectory);
+    }
+    ...
+}
+</code></pre>
+<p>父类构造函数也很简单，首先调用了它自己的父类构造函数，然后new DaxPathList。下面先分析下DexPathList的构造函数。</p>
+<pre><code class="java">    /**
+     * Constructs an instance.
+     *
+     * @param definingContext the context in which any as-yet unresolved
+     * classes should be defined
+     * @param dexPath list of dex/resource path elements, separated by
+     * {@code File.pathSeparator}
+     * @param libraryPath list of native library directory path elements,
+     * separated by {@code File.pathSeparator}
+     * @param optimizedDirectory directory where optimized {@code .dex} files
+     * should be found and written to, or {@code null} to use the default
+     * system directory for same
+     */
+    public DexPathList(ClassLoader definingContext, String dexPath,
+            String libraryPath, File optimizedDirectory) {
+        if (definingContext == null) {
+            throw new NullPointerException(&quot;definingContext == null&quot;);
+        }
+
+        if (dexPath == null) {
+            throw new NullPointerException(&quot;dexPath == null&quot;);
+        }
+
+        if (optimizedDirectory != null) {
+            if (!optimizedDirectory.exists())  {
+                throw new IllegalArgumentException(
+                        &quot;optimizedDirectory doesn&#39;t exist: &quot;
+                        + optimizedDirectory);
+            }
+
+            if (!(optimizedDirectory.canRead()
+                            &amp;&amp; optimizedDirectory.canWrite())) {
+                throw new IllegalArgumentException(
+                        &quot;optimizedDirectory not readable/writable: &quot;
+                        + optimizedDirectory);
+            }
+        }
+        //前面做了一些检查和异常处理
+        this.definingContext = definingContext;
+        ArrayList&lt;IOException&gt; suppressedExceptions = new ArrayList&lt;IOException&gt;();
+        this.dexElements = makeDexElements(splitDexPath(dexPath), optimizedDirectory,
+                                           suppressedExceptions);
+        if (suppressedExceptions.size() &gt; 0) {
+            this.dexElementsSuppressedExceptions =
+                suppressedExceptions.toArray(new IOException[suppressedExceptions.size()]);
+        } else {
+            dexElementsSuppressedExceptions = null;
+        }
+        this.nativeLibraryDirectories = splitLibraryPath(libraryPath);
+    }
+</code></pre>
+<p>其中关键代码是makeDexElements</p>
+<pre><code class="java">    /**
+     * Makes an array of dex/resource path elements, one per element of
+     * the given array.
+     */
+    private static Element[] makeDexElements(ArrayList&lt;File&gt; files, File optimizedDirectory,
+                                             ArrayList&lt;IOException&gt; suppressedExceptions) {
+        ArrayList&lt;Element&gt; elements = new ArrayList&lt;Element&gt;();
+        /*
+         * Open all files and load the (direct or contained) dex files
+         * up front.
+         */
+        for (File file : files) {
+            File zip = null;
+            DexFile dex = null;
+            String name = file.getName();
+            //对每个文件进行处理
+            if (file.isDirectory()) {
+            //如果是文件直接加入到elements中
+                // We support directories for looking up resources.
+                // This is only useful for running libcore tests.
+                elements.add(new Element(file, true, null, null));
+            } else if (file.isFile()){
+                if (name.endsWith(DEX_SUFFIX)) {//是dex
+                    // Raw dex file (not inside a zip/jar).
+                    try {
+                        dex = loadDexFile(file, optimizedDirectory);
+                    } catch (IOException ex) {
+                        System.logE(&quot;Unable to load dex file: &quot; + file, ex);
+                    }
+                } else {//不是dex。即是压缩文件：jar zip apk
+                    zip = file;
+                    try {
+                        dex = loadDexFile(file, optimizedDirectory);
+                    } catch (IOException suppressed) {
+                        /*
+                         * IOException might get thrown &quot;legitimately&quot; by the DexFile constructor if
+                         * the zip file turns out to be resource-only (that is, no classes.dex file
+                         * in it).
+                         * Let dex == null and hang on to the exception to add to the tea-leaves for
+                         * when findClass returns null.
+                         */
+                        suppressedExceptions.add(suppressed);
+                    }
+                }
+            } else {
+                System.logW(&quot;ClassLoader referenced unknown path: &quot; + file);
+            }
+
+            if ((zip != null) || (dex != null)) {
+                elements.add(new Element(file, false, zip, dex));
+            }
+        }
+
+        return elements.toArray(new Element[elements.size()]);
+    }
+</code></pre>
+<p>先看DexPathList内部是如何解析dex文件的，即分析loadDexFile代码</p>
+<pre><code class="java">    /**
+     * Constructs a {@code DexFile} instance, as appropriate depending
+     * on whether {@code optimizedDirectory} is {@code null}.
+     */
+    private static DexFile loadDexFile(File file, File optimizedDirectory)
+            throws IOException {
+        if (optimizedDirectory == null) {
+            return new DexFile(file);
+        } else {
+            String optimizedPath = optimizedPathFor(file, optimizedDirectory);
+            return DexFile.loadDex(file.getPath(), optimizedPath, 0);
+        }
+    }
+</code></pre>
+<p>如果被优化后的路径是空，那么直接返回new DexFile(file)。optimizedPathFor是判断优化路径，代码如下：</p>
+<pre><code class="java">    /**
+     * Converts a dex/jar file path and an output directory to an
+     * output file path for an associated optimized dex file.
+     */
+    private static String optimizedPathFor(File path,
+            File optimizedDirectory) {
+        /*
+         * Get the filename component of the path, and replace the
+         * suffix with &quot;.dex&quot; if that&#39;s not already the suffix.
+         *
+         * We don&#39;t want to use &quot;.odex&quot;, because the build system uses
+         * that for files that are paired with resource-only jar
+         * files. If the VM can assume that there&#39;s no classes.dex in
+         * the matching jar, it doesn&#39;t need to open the jar to check
+         * for updated dependencies, providing a slight performance
+         * boost at startup. The use of &quot;.dex&quot; here matches the use on
+         * files in /data/dalvik-cache.
+         */
+        String fileName = path.getName();
+        if (!fileName.endsWith(DEX_SUFFIX)) {
+            int lastDot = fileName.lastIndexOf(&quot;.&quot;);
+            if (lastDot &lt; 0) {
+                fileName += DEX_SUFFIX;
+            } else {
+                StringBuilder sb = new StringBuilder(lastDot + 4);
+                sb.append(fileName, 0, lastDot);
+                sb.append(DEX_SUFFIX);
+                fileName = sb.toString();
+            }
+        }
+        File result = new File(optimizedDirectory, fileName);
+        return result.getPath();
+    }
+</code></pre>
+<p>真正执行代码优化的是DexFile.loadDex，代码如下：</p>
+<pre><code class="java">    /**
+     * Open a DEX file, specifying the file in which the optimized DEX
+     * data should be written.  If the optimized form exists and appears
+     * to be current, it will be used; if not, the VM will attempt to
+     * regenerate it.
+     *
+     * This is intended for use by applications that wish to download
+     * and execute DEX files outside the usual application installation
+     * mechanism.  This function should not be called directly by an
+     * application; instead, use a class loader such as
+     * dalvik.system.DexClassLoader.
+     *
+     * @param sourcePathName
+     *  Jar or APK file with &quot;classes.dex&quot;.  (May expand this to include
+     *  &quot;raw DEX&quot; in the future.)
+     * @param outputPathName
+     *  File that will hold the optimized form of the DEX data.
+     * @param flags
+     *  Enable optional features.  (Currently none defined.)
+     * @return
+     *  A new or previously-opened DexFile.
+     * @throws IOException
+     *  If unable to open the source or output file.
+     */
+    static public DexFile loadDex(String sourcePathName, String outputPathName,
+        int flags) throws IOException {
+
+        /*
+         * TODO: we may want to cache previously-opened DexFile objects.
+         * The cache would be synchronized with close().  This would help
+         * us avoid mapping the same DEX more than once when an app
+         * decided to open it multiple times.  In practice this may not
+         * be a real issue.
+         */
+        return new DexFile(sourcePathName, outputPathName, flags);
+    }
+</code></pre>
+<p>也就是直接返回了DexFile，下面看看DexFile构造函数做了哪些事情：</p>
+<pre><code class="java">    /**
+     * Opens a DEX file from a given filename, using a specified file
+     * to hold the optimized data.
+     *
+     * @param sourceName
+     *  Jar or APK file with &quot;classes.dex&quot;.
+     * @param outputName
+     *  File that will hold the optimized form of the DEX data.
+     * @param flags
+     *  Enable optional features.
+     */
+    private DexFile(String sourceName, String outputName, int flags) throws IOException {
+        if (outputName != null) {
+            try {
+                String parent = new File(outputName).getParent();
+                if (Libcore.os.getuid() != Libcore.os.stat(parent).st_uid) {
+                    throw new IllegalArgumentException(&quot;Optimized data directory &quot; + parent
+                            + &quot; is not owned by the current user. Shared storage cannot protect&quot;
+                            + &quot; your application from code injection attacks.&quot;);
+                }
+            } catch (ErrnoException ignored) {
+                // assume we&#39;ll fail with a more contextual error later
+            }
+        }
+        //前面是异常判断
+        mCookie = openDexFile(sourceName, outputName, flags);
+        mFileName = sourceName;
+        guard.open(&quot;close&quot;);
+        //System.out.println(&quot;DEX FILE cookie is &quot; + mCookie + &quot; sourceName=&quot; + sourceName + &quot; outputName=&quot; + outputName);
+    }
+</code></pre>
+<p>关键代码:openDexFile</p>
+<pre><code class="java">    /*
+     * Open a DEX file.  The value returned is a magic VM cookie.  On
+     * failure, an IOException is thrown.
+     */
+    private static long openDexFile(String sourceName, String outputName, int flags) throws IOException {
+        // Use absolute paths to enable the use of relative paths when testing on host.
+        return openDexFileNative(new File(sourceName).getAbsolutePath(),
+                                 (outputName == null) ? null : new File(outputName).getAbsolutePath(),
+                                 flags);
+    }
+    /*
+     * Open a DEX file.  The value returned is a magic VM cookie.  On
+     * failure, an IOException is thrown.
+     */
+    private static native long openDexFileNative(String sourceName, String outputName, int flags);
+</code></pre>
+<p>这里也就直接调用了native方法进行优化。继续跟进代码在\dalvik\vm\native\dalvik_system_DexFile.cpp文件中的openDexFileNative() 函数，接下重点就在这个函数：</p>
+<pre><code class="cpp">static void Dalvik_dalvik_system_DexFile_openDexFileNative(const u4* args,
+    JValue* pResult)
+{
+//args[0]: sourceName java层传入的
+//args[1]: outputName    
+    StringObject* sourceNameObj = (StringObject*) args[0];
+    StringObject* outputNameObj = (StringObject*) args[1];
+    DexOrJar* pDexOrJar = NULL;
+    JarFile* pJarFile;
+RawDexFile* pRawDexFile;
+//DexOrJar*  JarFile*   RawDexFile* 目录
+    char* sourceName;
+    char* outputName;
+    //……
+    sourceName = dvmCreateCstrFromString(sourceNameObj);
+    if (outputNameObj != NULL)
+        outputName = dvmCreateCstrFromString(outputNameObj);
+    else
+        outputName = NULL;
+/*判断要加载的dex是否为系统中的dex文件
+* gDvm ？？？
+*/
+    if (dvmClassPathContains(gDvm.bootClassPath, sourceName)) {
+        ALOGW(&quot;Refusing to reopen boot DEX &#39;%s&#39;&quot;, sourceName);
+        dvmThrowIOException(
+            &quot;Re-opening BOOTCLASSPATH DEX files is not allowed&quot;);
+        free(sourceName);
+        free(outputName);
+        RETURN_VOID();
+    }
+
+    /*
+     * Try to open it directly as a DEX if the name ends with &quot;.dex&quot;.
+     * If that fails (or isn&#39;t tried in the first place), try it as a
+     * Zip with a &quot;classes.dex&quot; inside.
+     */
+    //判断sourcename扩展名是否是.dex
+    if (hasDexExtension(sourceName)
+            &amp;&amp; dvmRawDexFileOpen(sourceName, outputName, &amp;pRawDexFile, false) == 0) {
+        ALOGV(&quot;Opening DEX file &#39;%s&#39; (DEX)&quot;, sourceName);
+        pDexOrJar = (DexOrJar*) malloc(sizeof(DexOrJar));
+        pDexOrJar-&gt;isDex = true;
+        pDexOrJar-&gt;pRawDexFile = pRawDexFile;
+        pDexOrJar-&gt;pDexMemory = NULL;
+    //.jar文件
+    } else if (dvmJarFileOpen(sourceName, outputName, &amp;pJarFile, false) == 0) {
+        ALOGV(&quot;Opening DEX file &#39;%s&#39; (Jar)&quot;, sourceName);
+        pDexOrJar = (DexOrJar*) malloc(sizeof(DexOrJar));
+        pDexOrJar-&gt;isDex = false;
+        pDexOrJar-&gt;pJarFile = pJarFile;
+        pDexOrJar-&gt;pDexMemory = NULL;
+} else {
+//都不满足，抛出异常
+        ALOGV(&quot;Unable to open DEX file &#39;%s&#39;&quot;, sourceName);
+        dvmThrowIOException(&quot;unable to open DEX file&quot;);
+    }
+if (pDexOrJar != NULL) {
+        pDexOrJar-&gt;fileName = sourceName;
+    //把pDexOr这个结构体中的内容加到gDvm中的userDexFile结构的hash表中，便于Dalvik以后的查找
+        addToDexFileTable(pDexOrJar);
+    } else {
+        free(sourceName);
+    }
+    free(outputName);
+    RETURN_PTR(pDexOrJar);
+}
+</code></pre>
+<p>再看对.dex文件的处理函数dvmRawDexFileOpen（\dalvik\vm\RawDexFile.cpp）的处理</p>
+<pre><code class="cpp">/* See documentation comment in header. */
+int dvmRawDexFileOpen(const char* fileName, const char* odexOutputName,
+    RawDexFile** ppRawDexFile, bool isBootstrap)
+{
+    DvmDex* pDvmDex = NULL;
+    char* cachedName = NULL;
+    int result = -1;
+    int dexFd = -1;
+    int optFd = -1;
+    u4 modTime = 0;
+    u4 adler32 = 0;
+    size_t fileSize = 0;
+    bool newFile = false;
+    bool locked = false;
+    dexFd = open(fileName, O_RDONLY);  //打开dex文件
+    if (dexFd &lt; 0) goto bail;
+    /* If we fork/exec into dexopt, don&#39;t let it inherit the open fd. */
+dvmSetCloseOnExec(dexFd);//dexfd不继承
+//校验dex文件的标志，将第8字节开始的4个字节赋值给adler32。
+    if (verifyMagicAndGetAdler32(dexFd, &amp;adler32) &lt; 0) {
+        ALOGE(&quot;Error with header for %s&quot;, fileName);
+        goto bail;
+    }
+    //得到dex文件的大小和修改时间，保存在modTime和filesize中
+    if (getModTimeAndSize(dexFd, &amp;modTime, &amp;fileSize) &lt; 0) {
+        ALOGE(&quot;Error with stat for %s&quot;, fileName);
+        goto bail;
+    }
+
+    //odexOutputName就是odex文件名，如果odexOutputName为空，则自动生成一个。
+    if (odexOutputName == NULL) {
+        cachedName = dexOptGenerateCacheFileName(fileName, NULL);
+        if (cachedName == NULL)
+            goto bail;
+    } else {
+        cachedName = strdup(odexOutputName);   
+    }
+    //主要是验证缓存文件名的正确性，之后将dexOptHeader结构写入fd中
+    optFd = dvmOpenCachedDexFile(fileName, cachedName, modTime,
+        adler32, isBootstrap, &amp;newFile, /*createIfMissing=*/true);
+    locked = true;
+
+    if (newFile) {
+        u8 startWhen, copyWhen, endWhen;
+        bool result;
+        off_t dexOffset;
+        dexOffset = lseek(optFd, 0, SEEK_CUR);  //文件指针的位置
+        result = (dexOffset &gt; 0);
+        if (result) {
+            startWhen = dvmGetRelativeTimeUsec();
+    //将dex文件中的内容拷贝到当前odex文件，也就是dexOffset开始
+            result = copyFileToFile(optFd, dexFd, fileSize) == 0;
+            copyWhen = dvmGetRelativeTimeUsec();
+        }
+        if (result) {
+    //优化odex文件
+            result = dvmOptimizeDexFile(optFd, dexOffset, fileSize,
+                fileName, modTime, adler32, isBootstrap);
+        }
+    }
+    /*
+     * Map the cached version.  This immediately rewinds the fd, so it
+     * doesn&#39;t have to be seeked anywhere in particular.
+     */
+//将odex文件映射到内存空间(mmap)，并用mprotect将属性置为只读属性，并将映射的dex结构放在pDvmDex数据结构中，具体代码在下面。
+    if (dvmDexFileOpenFromFd(optFd, &amp;pDvmDex) != 0) {
+        ALOGI(&quot;Unable to map cached %s&quot;, fileName);
+        goto bail;
+    }
+……
+}
+</code></pre>
+<pre><code class="cpp">//Dalvik/vm/RewDexFile.cpp
+static int verifyMagicAndGetAdler32(int fd, u4 *adler32)
+{
+    u1 headerStart[12];
+    ssize_t amt = read(fd, headerStart, sizeof(headerStart));
+    if (amt &lt; 0) {
+        ALOGE(&quot;Unable to read header: %s&quot;, strerror(errno));
+        return -1;
+    }
+    if (amt != sizeof(headerStart)) {
+        ALOGE(&quot;Unable to read full header (only got %d bytes)&quot;, (int) amt);
+        return -1;
+    }
+    if (!dexHasValidMagic((DexHeader*) (void*) headerStart)) {
+        return -1;
+    }
+    *adler32 = (u4) headerStart[8]
+        | (((u4) headerStart[9]) &lt;&lt; 8)
+        | (((u4) headerStart[10]) &lt;&lt; 16)
+        | (((u4) headerStart[11]) &lt;&lt; 24);
+
+    return 0;
+}
+</code></pre>
+<pre><code class="cpp">//dalvik\vm\DvmDex.cpp
+/*
+ * Given an open optimized DEX file, map it into read-only shared memory and
+ * parse the contents.
+ *
+ * Returns nonzero on error.
+ */
+int dvmDexFileOpenFromFd(int fd, DvmDex** ppDvmDex)
+{
+    DvmDex* pDvmDex;
+    DexFile* pDexFile;
+    MemMapping memMap;
+    int parseFlags = kDexParseDefault;
+    int result = -1;
+
+    if (gDvm.verifyDexChecksum)
+        parseFlags |= kDexParseVerifyChecksum;
+    if (lseek(fd, 0, SEEK_SET) &lt; 0) {
+        ALOGE(&quot;lseek rewind failed&quot;);
+        goto bail;
+    }
+    //mmap映射fd文件,就是我们之前的odex文件
+   if (sysMapFileInShmemWritableReadOnly(fd, &amp;memMap) != 0) {
+        ALOGE(&quot;Unable to map file&quot;);
+        goto bail;
+    }
+    pDexFile = dexFileParse((u1*)memMap.addr, memMap.length, parseFlags);
+    if (pDexFile == NULL) {
+        ALOGE(&quot;DEX parse failed&quot;);
+        sysReleaseShmem(&amp;memMap);
+        goto bail;
+    }
+    pDvmDex = allocateAuxStructures(pDexFile);
+    if (pDvmDex == NULL) {
+        dexFileFree(pDexFile);
+        sysReleaseShmem(&amp;memMap);
+        goto bail;
+    }
+/* tuck this into the DexFile so it gets released later */
+//将映射odex文件的内存拷贝到DvmDex的结构中
+    sysCopyMap(&amp;pDvmDex-&gt;memMap, &amp;memMap);
+    pDvmDex-&gt;isMappedReadOnly = true;
+    *ppDvmDex = pDvmDex;
+    result = 0;
+
+bail:
+    return result;
+}
+</code></pre>
+<pre><code class="cpp">/*dalvik\libdex\SysUtil.cpp
+*/
+int sysMapFileInShmemWritableReadOnly(int fd, MemMapping* pMap)
+{
+    off_t start;
+    size_t length;
+    void* memPtr;
+assert(pMap != NULL);
+//获得文件长度和文件开始地址
+    if (getFileStartAndLength(fd, &amp;start, &amp;length) &lt; 0)
+        return -1;
+//映射文件
+    memPtr = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_FILE | MAP_PRIVATE,
+            fd, start);
+    //……
+//将保护属性置为只读属性
+    if (mprotect(memPtr, length, PROT_READ) &lt; 0) {
+      //…….
+    }
+    pMap-&gt;baseAddr = pMap-&gt;addr = memPtr;
+    pMap-&gt;baseLength = pMap-&gt;length = length;
+return 0;
+//……
+}
+</code></pre>
 <p>这些就是对dex的文件处理，对压缩包zip,jar,apk的有兴趣的可以直接分析下源码。</p>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>首先是对文件名的修正，后缀名置为”.dex”作为输出文件，然后生个一个DexPathList对象函数直接返回一个DexPathList对象，</p>
 <p>在DexPathList的构造函数中调用makeDexElements()函数，在makeDexElement()函数中调用loadDexFile()开始对.dex或者是.jar .zip .apk文件进行处理，</p>
@@ -234,13 +804,13 @@
         
         
     <div class="widget">    
-        <h3 class="title">搜索</h3>
+        <h3 class="title">Search</h3>
         <div id="search-form">
             <div id="result-mask" class="hide"></div>
             <div class="search-area">
                 
                     <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
-                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                    <button type="button" class="search-form-submit" id="search-local">localSearch</button>
                 
                 
             </div>
@@ -275,7 +845,7 @@
         
         
     <div class="widget">
-      <h3 class="title">社交</h3> 
+      <h3 class="title">Social</h3> 
         <div class="content social">
             
 	            <a href="//github.com/huangtianyu" rel="external nofollow" title="Github" target="_blank">
@@ -309,15 +879,15 @@
         
         
     <div class="widget">
-        <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link current" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li></ul>
+        <h3 class="title">Categories</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link current" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
         
         
     <div class="widget">
-      <h3 class="title">归档</h3>
+      <h3 class="title">Archives</h3>
         <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">December 2017</i></a><span class="archive-list-count">3</span></li></ul>
     </div>
 
@@ -325,7 +895,7 @@
         
         
   <div class="widget">
-    <h3 class="title">标签云</h3>
+    <h3 class="title">Tag Cloud</h3>
     <div class="content tag-cloud">
         <a href="/tags/Dex类加载/" style="font-size: 10px;">Dex类加载</a> <a href="/tags/Hexo学习/" style="font-size: 10px;">Hexo学习</a> <a href="/tags/Hexo搭建/" style="font-size: 10px;">Hexo搭建</a>
     </div>
@@ -335,7 +905,7 @@
         
         
     <div class="widget">
-        <h3 class="title">友链</h3>
+        <h3 class="title">Friends</h3>
         <div class="content friends-link">
         
             <a href="http://blog.csdn.net/hty1053240123?viewmode=contents" class="fa" target="_blank">个人博客</a>
@@ -395,5 +965,9 @@
 <script src="/js/app.js?rev=@@hash"></script>
 
 
+    <script type="text/javascript">
+        // highlight
+        //hljs.initHighlightingOnLoad();
+    </script>
 </body>
 </html>

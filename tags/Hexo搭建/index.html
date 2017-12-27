@@ -24,7 +24,7 @@
     <!--Title-->
 
 
-<title>标签: Hexo搭建 | 天宇</title>
+<title>Tag: Hexo搭建 | 天宇</title>
 
 
     <link rel="alternate" href="/atom.xml" title="天宇" type="application/atom+xml">
@@ -68,6 +68,8 @@
 <div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
 <![endif]-->
 
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
 <body>
     <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
     <div class="main-header-box">
@@ -94,7 +96,7 @@
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="menu">
                         
-                            <li role="presentation"><a href="/"><i class="fa fa-fw /favicon.ico"></i>首页</a>
+                            <li role="presentation"><a href="/"><i class="fa fa-fw /favicon.ico"></i>Home</a>
                             </li>
                         
                             <li role="presentation"><a href="/categories/前端/"><i class="fa fa-fw /favicon.ico"></i>前端</a>
@@ -161,13 +163,13 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
         
         
     <div class="widget">    
-        <h3 class="title">搜索</h3>
+        <h3 class="title">Search</h3>
         <div id="search-form">
             <div id="result-mask" class="hide"></div>
             <div class="search-area">
                 
                     <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
-                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                    <button type="button" class="search-form-submit" id="search-local">localSearch</button>
                 
                 
             </div>
@@ -202,7 +204,7 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
         
         
     <div class="widget">
-      <h3 class="title">社交</h3> 
+      <h3 class="title">Social</h3> 
         <div class="content social">
             
 	            <a href="//github.com/huangtianyu" rel="external nofollow" title="Github" target="_blank">
@@ -236,15 +238,15 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
         
         
     <div class="widget">
-        <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link current" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li></ul>
+        <h3 class="title">Categories</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link current" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
         
         
     <div class="widget">
-      <h3 class="title">归档</h3>
+      <h3 class="title">Archives</h3>
         <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">December 2017</i></a><span class="archive-list-count">3</span></li></ul>
     </div>
 
@@ -252,7 +254,7 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
         
         
   <div class="widget">
-    <h3 class="title">标签云</h3>
+    <h3 class="title">Tag Cloud</h3>
     <div class="content tag-cloud">
         <a href="/tags/Dex类加载/" style="font-size: 10px;">Dex类加载</a> <a href="/tags/Hexo学习/" style="font-size: 10px;">Hexo学习</a> <a href="/tags/Hexo搭建/" style="font-size: 10px;">Hexo搭建</a>
     </div>
@@ -262,7 +264,7 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
         
         
     <div class="widget">
-        <h3 class="title">友链</h3>
+        <h3 class="title">Friends</h3>
         <div class="content friends-link">
         
             <a href="http://blog.csdn.net/hty1053240123?viewmode=contents" class="fa" target="_blank">个人博客</a>
@@ -322,5 +324,9 @@ Hexo和jekyll两者对比Hexo的主题更多，更好看。
 <script src="/js/app.js?rev=@@hash"></script>
 
 
+    <script type="text/javascript">
+        // highlight
+        //hljs.initHighlightingOnLoad();
+    </script>
 </body>
 </html>
