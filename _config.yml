@@ -83,3 +83,24 @@ deploy:
   type: git
   repository: https://github.com/huangtianyu/huangtianyu.github.io.git
   branch: master
+#站内搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# Extensions
+## Plugins: http://hexo.io/plugins/
+#RSS订阅
+plugin:
+- hexo-generator-feed
+#Feed Atom
+feed:
+type: atom
+path: atom.xml
+limit: 20
+
+#站点地图
+sitemap:
+    path: sitemap.xml
