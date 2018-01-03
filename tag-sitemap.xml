@@ -9,14 +9,14 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
+        <loc>http://yoursite.com/tags/Hexo%E5%AD%A6%E4%B9%A0/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/Hexo%E5%AD%A6%E4%B9%A0/</loc>
+        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
