@@ -134,11 +134,11 @@ declaration:
 ## 主题评论
 ### gitment
 gitment:
-  enable: false
-  owner: 
-  repo: 
-  client_id: 
-  client_secret: 
+  enable: true
+  owner: huangtianyu
+  repo: https://github.com/huangtianyu/huangtianyu.github.io.git
+  client_id: 67bd99656d42c9456452
+  client_secret: 610a33ef542b28fe0b55208ca30ef1986de1bcc6
   perPage: 10
 
 
