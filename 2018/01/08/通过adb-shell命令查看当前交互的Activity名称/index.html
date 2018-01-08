@@ -24,7 +24,7 @@
     <!--Title-->
 
 
-<title>Archives | 天宇</title>
+<title>通过adb shell命令查看当前交互的Activity名称 | 天宇</title>
 
 
     <link rel="alternate" href="/atom.xml" title="天宇" type="application/atom+xml">
@@ -35,7 +35,11 @@
     
 
 
+    <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
 
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css?rev=9.12.0">
 
 
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
@@ -131,69 +135,92 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content ">
-                    <div id="main">
-  <div id="post-list">
-    <ul class="archives-post-list">
-    	<h1 class="info">年 月</h1>
-        
-          <li class="post-items" _href="/2018/01/08/在git命令行下查看git-stash里面文件的内容/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/08/在git命令行下查看git-stash里面文件的内容/">  在git命令行下查看git stash里面文件的内容 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2018/01/08/通过adb-shell命令查看当前交互的Activity名称/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/08/通过adb-shell命令查看当前交互的Activity名称/"> 通过adb shell命令查看当前交互的Activity名称 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2018/01/03/自定义控件View之onMeasure调用时机源码分析/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/03/自定义控件View之onMeasure调用时机源码分析/"> 自定义控件View之onMeasure调用时机源码分析 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2018/01/03/应用内存优化之OnLowMemory-OnTrimMemory/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/03/应用内存优化之OnLowMemory-OnTrimMemory/"> 应用内存优化之OnLowMemory&amp;OnTrimMemory </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2018/01/03/RoboBinding-MVVM-架构介绍/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/03/RoboBinding-MVVM-架构介绍/"> RoboBinding(MVVM)架构介绍 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2018/01/03/AsyncTask研究/">
-            <h3 class="post-item-title">
-            	<a href="/2018/01/03/AsyncTask研究/"> AsyncTask研究 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2017/12/27/DexClassLoader加载过程分析/">
-            <h3 class="post-item-title">
-            	<a href="/2017/12/27/DexClassLoader加载过程分析/"> DexClassLoader加载过程分析 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2017/12/27/Hexo-GitHub搭建个人博客/">
-            <h3 class="post-item-title">
-            	<a href="/2017/12/27/Hexo-GitHub搭建个人博客/"> Hexo+GitHub搭建个人博客 </a>
-            </h3>  
-          </li>
-        
-          <li class="post-items" _href="/2017/12/27/hexo常用命令/">
-            <h3 class="post-item-title">
-            	<a href="/2017/12/27/hexo常用命令/"> hexo常用命令 </a>
-            </h3>  
-          </li>
-        
-    </ul>
-  </div>
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="通过adb shell命令查看当前交互的Activity名称">
+            
+            通过adb shell命令查看当前交互的Activity名称
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Android</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            adb查看交互Activity名称
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/01/08</span>
+    </span>
 </div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>在做android逆向的时候，有时候会需要知道当前的界面处于哪个Activity，这时候就可以使用adb shell命令来查看当前与用户交互的Activity名称。</p>
+<h4 id="原文地址"><a href="#原文地址" class="headerlink" title="原文地址"></a>原文地址</h4><p>先给出原文地址：<br><a href="http://stackoverflow.com/questions/11549366/print-the-current-back-stack-in-the-log/26424943#26424943" target="_blank" rel="noopener">http://stackoverflow.com/questions/11549366/print-the-current-back-stack-in-the-log/26424943#26424943</a></p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>有如下几种方法可以获取：</p>
+<h5 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h5><pre><code>adb shell dumpsys activity activities | sed -En -e &#39;/Running activities/,/Run #0/p&#39;
+</code></pre><p><img src="http://img.blog.csdn.net/20170110121929007?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHR5MTA1MzI0MDEyMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="方法一"><br>其中TaskRecord即为查询到的记录。其中com.sina.weibo为包名，.VisitorMainTabActivity为对应的Activity名称。</p>
+<h5 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h5><pre><code>adb shell dumpsys activity | grep -i run
+</code></pre><p>查询结果为：<br><img src="http://img.blog.csdn.net/20170110122114759?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHR5MTA1MzI0MDEyMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="方法二"></p>
+<h5 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h5><pre><code>adb shell dumpsys activity | grep &quot;mFoc&quot;
+</code></pre><p>查询结果为：<br><img src="http://img.blog.csdn.net/20170110122247214?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHR5MTA1MzI0MDEyMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="方法三"><br>其中mFocusedActivity就是当前和用户交互的Activity。<br>如果在Windows下使用时，则先通过adb shell进入到adb shell里，然后把adb shell去了，再将余下的复制到$后面进行执行，例如：<br><img src="http://img.blog.csdn.net/20170110122816847?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHR5MTA1MzI0MDEyMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="在shell下执行grep语句"><br>这样就不会提示：“grep”不是内部或外部命令，也不是可运行查询了</p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="http://blog.csdn.net/hty1053240123?viewmode=contents" target="_blank">天宇240</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2018/01/08/在git命令行下查看git-stash里面文件的内容/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/2018/01/03/自定义控件View之onMeasure调用时机源码分析/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1966422"></script>
+
+
+
+
+
+
+
+
+    </div>
 
 
 

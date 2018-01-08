@@ -2,13 +2,6 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
-        <lastmod>2018-01-03T13:20:32.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://yoursite.com/tags/Hexo%E6%90%AD%E5%BB%BA/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -17,6 +10,13 @@
 
     <url>
         <loc>http://yoursite.com/tags/Hexo%E5%AD%A6%E4%B9%A0/</loc>
+        <lastmod>2018-01-03T13:20:32.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -39,6 +39,20 @@
     <url>
         <loc>http://yoursite.com/tags/View-onMeasure/</loc>
         <lastmod>2018-01-03T15:53:14.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/adb%E6%9F%A5%E7%9C%8B%E4%BA%A4%E4%BA%92Activity%E5%90%8D%E7%A7%B0/</loc>
+        <lastmod>2018-01-08T12:50:32.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/%E6%9F%A5%E7%9C%8Bgit-bash%E5%86%85%E5%AE%B9/</loc>
+        <lastmod>2018-01-08T12:54:46.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
