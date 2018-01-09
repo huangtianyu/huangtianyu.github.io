@@ -1,8 +1,8 @@
 ---
 title: RoboBinding(MVVM)架构介绍
 date: 2018-01-03 23:08:14
-categories:
-tags:
+categories: 设计模式
+tags: RoboBinding,MVC,MVP
 ---
 [TOC]
 ### 1. 什么是RoboBinding?
