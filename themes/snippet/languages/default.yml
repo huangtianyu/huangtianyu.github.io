@@ -23,8 +23,8 @@ read_more: Read
 home: Home
 archives: Archives
 about: About
-search_local: localSearch
-search_google: googleSearch
+search_local: " localSearch "
+search_google: " googleSearch "
 author: Author
 date: Published Date
 update: Updated Date
