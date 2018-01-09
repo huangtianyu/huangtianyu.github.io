@@ -9,14 +9,14 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/Hexo%E5%AD%A6%E4%B9%A0/</loc>
+        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/Dex%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
+        <loc>http://yoursite.com/tags/Hexo%E5%AD%A6%E4%B9%A0/</loc>
         <lastmod>2018-01-03T13:20:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -44,15 +44,29 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/adb%E6%9F%A5%E7%9C%8B%E4%BA%A4%E4%BA%92Activity%E5%90%8D%E7%A7%B0/</loc>
-        <lastmod>2018-01-08T12:50:32.000Z</lastmod>
+        <loc>http://yoursite.com/tags/%E6%9F%A5%E7%9C%8Bgit-bash%E5%86%85%E5%AE%B9/</loc>
+        <lastmod>2018-01-09T14:15:30.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/%E6%9F%A5%E7%9C%8Bgit-bash%E5%86%85%E5%AE%B9/</loc>
-        <lastmod>2018-01-08T12:54:46.000Z</lastmod>
+        <loc>http://yoursite.com/tags/adb%E6%9F%A5%E7%9C%8B%E4%BA%A4%E4%BA%92Activity%E5%90%8D%E7%A7%B0/</loc>
+        <lastmod>2018-01-09T14:15:30.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/RoboBinding-MVC-MVP/</loc>
+        <lastmod>2018-01-09T14:38:55.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/onAttachedToWindow%E5%92%8ConDetachedFromWindow-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+        <lastmod>2018-01-09T15:06:58.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

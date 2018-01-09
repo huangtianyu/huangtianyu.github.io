@@ -24,7 +24,7 @@
     <!--Title-->
 
 
-<title>标签: Dex类加载 | 天宇</title>
+<title>标签: onAttachedToWindow和onDetachedFromWindow,源码解析 | 天宇</title>
 
 
     <link rel="alternate" href="/atom.xml" title="天宇" type="application/atom+xml">
@@ -134,7 +134,7 @@
                 <main class="col-md-8 main-content ">
                     <h3> 
 
-    Dex类加载 
+    onAttachedToWindow和onDetachedFromWindow,源码解析 
 
 
 </h3>
@@ -144,17 +144,19 @@
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2017/12/27/DexClassLoader加载过程分析/">DexClassLoader加载过程分析</a>
+                    <a href="/2018/01/09/onAttachedToWindow和onDetachedFromWindow调用时机源码解析/">onAttachedToWindow和onDetachedFromWindow调用时机源码解析</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2017年12月27日
+                        2018年01月09日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                在动态加载dex时，均采用的是DexClassLoader类进行加载，网上也有很多对如何加载进行分析的，现结合Android5.1源码进行分析。
-实例先来看一个实例，实例完成动态加载SD卡上的一个jar包，在jar包中Toast一段话...
+                1.示例先上测试代码：MyView.java
+public class MyView extends TextView {  
+    public MyView(Context context) {  
+        super(...
             </p> 
         </div>
     </article>
