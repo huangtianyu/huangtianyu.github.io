@@ -3,20 +3,23 @@
 
 ## menu 导航菜单显示
 menu:
-- page: home
+- page: 首页
   url: /
   icon: /favicon.ico
 - page: 前端
-  url: /categories/前端/
+  url: /前端/
   icon: /favicon.ico
 - page: 后端
-  url: /categories/后端/
+  url: /后端/
   icon: /favicon.ico
 - page: 工具
-  url: /categories/工具/
+  url: /工具/
   icon: /favicon.ico
 - page: 资源
-  url: /categories/资源/
+  url: /资源/
+  icon: /favicon.ico
+- page: 关于
+  url: /关于/
   icon: /favicon.ico
 
 ## favicon 
@@ -50,10 +53,10 @@ jsonContent:
     tags: false
 
 ## 网站公告设置
+#<hr/>接受贡献，包括不限于提交问题与需求，修复代码。欢迎Pull Request个人gitHub<br/>个人GitHub：<a href="https://github.com/huangtianyu/">欢迎Star一下</a>
 notification: |-
-            <p>技术笔记~ <br/>
+            <p>公告就是醒目，为了提醒自己多学习，多总结~ <br/>
             好记忆不如烂笔头~ <br/>
-            <hr/>接受贡献，包括不限于提交问题与需求，修复代码。欢迎Pull Request个人gitHub<br/>个人GitHub：<a href="https://github.com/huangtianyu/">欢迎Star一下</a>
             </p>
 
 ## 社交设置
@@ -91,6 +94,7 @@ arch_config:
 ## 友链设置
 links:
   - 个人博客: http://blog.csdn.net/hty1053240123?viewmode=contents
+  - 简书: https://www.jianshu.com/u/3c8a983c71dc
 
 
 # 主题自定义个性化配置
@@ -169,3 +173,8 @@ baidu_push:
 since: 2017
 robot: 'all' ### 控制搜索引擎的抓取和索引编制行为，默认为all
 version: 1.2.0
+
+#打赏
+reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+wechatpay: /img/avatar.jpg
+alipay: /img/avatar.jpg
