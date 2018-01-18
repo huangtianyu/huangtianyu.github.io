@@ -422,6 +422,26 @@ private void finish(Result result) {
 ```
 可以看到，如果该任务是被用户cancel的，那么finish时执行的会是onCancelled()，而不是onPostExecute()。另外，为了确保在用户cancel任务之后，该任务能真的快速退出，我们应该在doInBackground()里周期性地检查一下isCancelled()的返回值，一旦发现，就立即退出。
 
+#### 2.3 线程退出
+在将当前任务加入到AsyncTask执行时，如果想取消可以直接调用cancel，进行取消。cancel会把没有具体进入线程中的这个任务给取消了，但如果当前任务已经在线程中执行，那么可以在当前任务中不断判断是否cancel了，如果cancel了就return，这样达到线程退出的目的。具体代码如下：
+``` java
+@Override
+protected Void doInBackground(Void... voids) {
+  if (isCancelled()) {
+    return null;
+  }
+  // 耗时任务中依然要判断是否cancel了，
+  for(int i = 0; i < n; i++) {
+  	if (isCancelled()) {
+    	return null;
+    }
+    //TODO 原有循环内逻辑。
+  }
+  return null;
+}
+```
+通过上面两个isCanceled进行判断，当当前任务cancel了，就能快速退出当前任务，避免不必要的消耗。
+
 ### 3 小结
 关于AsyncTask的知识，我们就先说这么多。现在大体总结一下：
 1）使用AsyncTask时，主要是重写其派生类的doInBackground()，而且该函数会在线程池的某个工作线程里被回调的；

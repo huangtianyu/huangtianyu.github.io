@@ -690,6 +690,7 @@ pre {
   border: none;
   background: none;
   padding: 0;
+  white-space: inherit;
 }
 .post-content pre tt {
   color: #808080;
