@@ -27,7 +27,7 @@ multiple apps (including yours) that can hande the given URL. For example, figur
 disambiguation dialog after the user clicks a map link, asking whether to open the link in Maps or Chrome.
 ```
 [Deeplink](https://developer.android.com/training/app-links/deep-linking.html)是一个intent过滤器，他可以使用户直接进入某个Activity页面。但是有个不好的是当匹配到多个intent时就会弹一个让用户选择的框。官方给了下面一张图，而AppLinks就不会有这个弹框：
-<img src="https://developer.android.com/training/app-links/images/app-disambiguation_2x.png" width = "200" height = "400" alt="The disambiguation dialog" align="center" />
+<img src="https://upload-images.jianshu.io/upload_images/7170430-1a711d54789310a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/200" width = "200" height = "400" alt="The disambiguation dialog" align="center" />
 具体区别官方也列了以下：
 
 | Item      |    Deep links | App links |
