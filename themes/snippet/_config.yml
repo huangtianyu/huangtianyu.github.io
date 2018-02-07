@@ -132,7 +132,7 @@ declaration:
 ## 主题评论
 ### gitment
 gitment:
-  enable: true
+  enable: false
   owner: huangtianyu
   repo: https://github.com/huangtianyu/huangtianyu.github.io.git
   client_id: 67bd99656d42c9456452
@@ -142,7 +142,7 @@ gitment:
 
 ### 友言评论
 uyan:
-  enable: false
+  enable: true
   uyan_id: 1966422
 
 
@@ -152,7 +152,8 @@ uyan:
 cnzz_analytics: 1263868967
 
 ### 百度统计
-baidu_analytics: true
+#baidu_analytics: true
+baidu_tongji: true
 
 ### 谷歌统计
 # google_analytics: 
