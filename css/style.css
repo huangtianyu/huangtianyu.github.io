@@ -615,12 +615,12 @@ pre {
 }
 .post-content ul {
   margin: 0 0 24px 6px;
-  padding-left: 16px;
+  padding-left: 30px;
   list-style-type: square;
 }
 .post-content ol {
   margin: 0 0 24px 6px;
-  padding-left: 16px;
+  padding-left: 30px;
   list-style-type: decimal;
 }
 .post-content li {
@@ -690,6 +690,7 @@ pre {
   border: none;
   background: none;
   padding: 0;
+  white-space: inherit;
 }
 .post-content pre tt {
   color: #808080;

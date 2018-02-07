@@ -30,7 +30,7 @@
     <link rel="alternate" href="/atom.xml" title="天宇" type="application/atom+xml">
 
 
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico"  type="image/x-icon">
 
     
 
@@ -53,20 +53,20 @@
 
 
 
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?true";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
-
 
 
     
     
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?ec3431a06d36ef6d6ee8b5b0bcade8d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
 </head>
 
 
@@ -110,16 +110,19 @@
                             <li role="presentation"><a href="/"><i class="fa fa-fw /favicon.ico"></i>首页</a>
                             </li>
                         
-                            <li role="presentation"><a href="/categories/前端/"><i class="fa fa-fw /favicon.ico"></i>前端</a>
+                            <li role="presentation"><a href="/前端/"><i class="fa fa-fw /favicon.ico"></i>前端</a>
                             </li>
                         
-                            <li role="presentation"><a href="/categories/后端/"><i class="fa fa-fw /favicon.ico"></i>后端</a>
+                            <li role="presentation"><a href="/后端/"><i class="fa fa-fw /favicon.ico"></i>后端</a>
                             </li>
                         
-                            <li role="presentation"><a href="/categories/工具/"><i class="fa fa-fw /favicon.ico"></i>工具</a>
+                            <li role="presentation"><a href="/工具/"><i class="fa fa-fw /favicon.ico"></i>工具</a>
                             </li>
                         
-                            <li role="presentation"><a href="/categories/资源/"><i class="fa fa-fw /favicon.ico"></i>资源</a>
+                            <li role="presentation"><a href="/资源/"><i class="fa fa-fw /favicon.ico"></i>资源</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/关于/"><i class="fa fa-fw /favicon.ico"></i>关于</a>
                             </li>
                         
                     </ul>
@@ -143,19 +146,17 @@
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2018/01/09/onAttachedToWindow和onDetachedFromWindow调用时机源码解析/">onAttachedToWindow和onDetachedFromWindow调用时机源码解析</a>
+                    <a href="/2018/02/04/Android-NDK开发系列教程4：对类变量进行操作/">Android NDK开发系列教程4：对类变量进行操作</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2018年01月09日
+                        2018年02月04日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                1.示例先上测试代码：MyView.java
-public class MyView extends TextView {  
-    public MyView(Context context) {  
-        super(...
+                通常我们也可以直接利用jni来访问和处理类的变量，不一定非要通过Java方法来操作Java类变量。对类变量操作时，类的静态变量和类的实例变量的操作稍微有些不同，下面进行讲解。
+对类的静态变量进行操作类的静态变量属于类，是所有该类实例共...
             </p> 
         </div>
     </article>
@@ -165,42 +166,20 @@ public class MyView extends TextView {
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2018/01/08/通过adb-shell命令查看当前交互的Activity名称/">通过adb shell命令查看当前交互的Activity名称</a>
+                    <a href="/2018/02/02/Android-NDK开发系列教程3：基本方法调用及传参（续）/">Android NDK开发系列教程3：基本方法调用及传参（续）</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2018年01月08日
+                        2018年02月02日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                需求在做android逆向的时候，有时候会需要知道当前的界面处于哪个Activity，这时候就可以使用adb shell命令来查看当前与用户交互的Activity名称。
-原文地址先给出原文地址：http://stackoverflow...
-            </p> 
-        </div>
-    </article>
- 
-    <article class="post">
-        
-        <div class="post-content">
-            <div class="post-head home-post-head">
-                <h1 class="post-title"> 
-                    <a href="/2018/01/03/自定义控件View之onMeasure调用时机源码分析/">自定义控件View之onMeasure调用时机源码分析</a>
-                </h1>
-                <div class="post-meta">  &bull;
-                    <time class="post-date" datetime="" title="">
-                        2018年01月03日
-                    </time>
-                </div>
-            </div>
-            <p class="brief">
-                先上测试代码：
-MainActivity.java
-import android.app.Activity;  
-import android.os.Bundle;  
-import android.util.Log;  
+                上一节主要讲解Java向native传参，下面主要讲解从native传相应的数据到java层。接着上一节，下面主要讲解内容如下：
 
-publ...
+native向java返回字符串类型
+native向java返回java对象
+native向java返...
             </p> 
         </div>
     </article>
@@ -210,16 +189,16 @@ publ...
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2018/01/03/应用内存优化之OnLowMemory-OnTrimMemory/">应用内存优化之OnLowMemory&OnTrimMemory</a>
+                    <a href="/2018/02/02/Android-NDK开发系列教程2：基本方法调用及传参/"> Android NDK开发系列教程2：基本方法调用及传参</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2018年01月03日
+                        2018年02月02日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                1.应用内存onLowMemory&amp; onTrimMemory优化onLowMemory&amp; onTrimMemory简介：OnLowMemory是Android提供的API，在系统内存不足，所有后台程序（优先级为bac...
+                1. 简介有时候我写了个Java层的方法，希望native层也能够调用（尤其是一个实体类的get，set方法在native一般都会用到）。这在jni开发中也很常见，jni.h中也提供了很多方法。下面利用具体实例进行说明。这里直接使用A...
             </p> 
         </div>
     </article>
@@ -229,17 +208,16 @@ publ...
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2018/01/03/AsyncTask研究/">AsyncTask研究</a>
+                    <a href="/2018/02/01/Android-NDK开发系列教程1：环境搭建及基本代码结构/">Android NDK开发系列教程1：环境搭建及基本代码结构</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2018年01月03日
+                        2018年02月01日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                1. AsyncTask概述在Android平台上，要执行异步工作时，我们常常会用到AsyncTask。这个类可以算是历史悠久，早在Android 1.5版时，它就存在了。
-AsyncTask的使用方法比较简单，无非是创建一个Asyn...
+                1. Eclipse NDK开发环境搭建在开发NDK之前，Java的SDK，Android的NDK，以及Eclipse的ADT工具都需要大家先安装好，在SDK早期版本中没有ndk相关文件，当最近的AndroidSDK中包含了ndk相关...
             </p> 
         </div>
     </article>
@@ -249,22 +227,47 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
         <div class="post-content">
             <div class="post-head home-post-head">
                 <h1 class="post-title"> 
-                    <a href="/2017/12/27/DexClassLoader加载过程分析/">DexClassLoader加载过程分析</a>
+                    <a href="/2018/01/19/Android中onSaveInstanceState和onRestoreInstanceState讲解/">Android中onSaveInstanceState和onRestoreInstanceState讲解</a>
                 </h1>
                 <div class="post-meta">  &bull;
                     <time class="post-date" datetime="" title="">
-                        2017年12月27日
+                        2018年01月19日
                     </time>
                 </div>
             </div>
             <p class="brief">
-                在动态加载dex时，均采用的是DexClassLoader类进行加载，网上也有很多对如何加载进行分析的，现结合Android5.1源码进行分析。
-实例先来看一个实例，实例完成动态加载SD卡上的一个jar包，在jar包中Toast一段话...
+                在Android系统中，有时系统可能因为系统资源不够而杀死(kill)某些Activity，在kill Activity之前会调用 onSaveInstanceState来保存一些状态信息(当然也可以保存其他信息)，当再次回到该Act...
+            </p> 
+        </div>
+    </article>
+ 
+    <article class="post">
+        
+        <div class="post-content">
+            <div class="post-head home-post-head">
+                <h1 class="post-title"> 
+                    <a href="/2018/01/18/AppLinks使用详解/">AppLinks使用详解</a>
+                </h1>
+                <div class="post-meta">  &bull;
+                    <time class="post-date" datetime="" title="">
+                        2018年01月18日
+                    </time>
+                </div>
+            </div>
+            <p class="brief">
+                1. 简介官方介绍Android App Links内容是：
+Android App Links are a special type of deep link that allow your website URLs to imme...
             </p> 
         </div>
     </article>
  
 
+
+    <nav class="pagination" role="navigation">
+        <div id="page-nav">
+            <span class="page-number current">1</span><a class="page-number" href="/categories/Android/page/2/">2</a><a class="page-number" href="/categories/Android/page/3/">3</a><a class="extend next" rel="next" href="/categories/Android/page/2/"><i class='fa fa-angle-right'></i></a>
+        </div>
+    </nav>
 
 
 
@@ -310,9 +313,8 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
     <div class="widget notification">
         <h3 class="title">网站公告</h3>
         <div>
-            <p>技术笔记~ <br/>
+            <p>公告就是醒目，为了提醒自己多学习，多总结~ <br/>
 好记忆不如烂笔头~ <br/>
-<hr/>接受贡献，包括不限于提交问题与需求，修复代码。欢迎Pull Request个人gitHub<br/>个人GitHub：<a href="https://github.com/huangtianyu/">欢迎Star一下</a>
 </p>
         </div>
     </div>
@@ -331,16 +333,8 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
 			    	<i class="envelope-o fa fa-envelope-o"></i>
 			    </a>
             
-	            <a href="1053240123" rel="external nofollow" title="联系QQ" target="_blank">
-			    	<i class="qq fa fa-qq"></i>
-			    </a>
-            
-	            <a href="/" rel="external nofollow" title="微博" target="_blank">
+	            <a href="https://weibo.com/1804011630/" rel="external nofollow" title="微博" target="_blank">
 			    	<i class="weibo fa fa-weibo"></i>
-			    </a>
-            
-	            <a href="/" rel="external nofollow" title="QQ群" target="_blank">
-			    	<i class="users fa fa-users"></i>
 			    </a>
             
 	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
@@ -355,7 +349,7 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
         
     <div class="widget">
         <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/"><i class="fa" aria-hidden="true">Android</i></a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/"><i class="fa" aria-hidden="true">Hexo</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gradle/"><i class="fa" aria-hidden="true">gradle</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/人工智能/"><i class="fa" aria-hidden="true">人工智能</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li></ul>
     </div>
 
 
@@ -363,7 +357,7 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
         
     <div class="widget">
       <h3 class="title">归档</h3>
-        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/"><i class="fa" aria-hidden="true">January 2018</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">December 2017</i></a><span class="archive-list-count">3</span></li></ul>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/"><i class="fa" aria-hidden="true">一月 2018</i></a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li></ul>
     </div>
 
 
@@ -372,7 +366,7 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
   <div class="widget">
     <h3 class="title">标签云</h3>
     <div class="content tag-cloud">
-        <a href="/tags/Android学习/" style="font-size: 10px;">Android学习</a> <a href="/tags/Dex类加载/" style="font-size: 10px;">Dex类加载</a> <a href="/tags/Hexo学习/" style="font-size: 10px;">Hexo学习</a> <a href="/tags/Hexo搭建/" style="font-size: 10px;">Hexo搭建</a> <a href="/tags/RoboBinding-MVC-MVP/" style="font-size: 10px;">RoboBinding,MVC,MVP</a> <a href="/tags/View-onMeasure/" style="font-size: 10px;">View onMeasure</a> <a href="/tags/adb查看交互Activity名称/" style="font-size: 10px;">adb查看交互Activity名称</a> <a href="/tags/onAttachedToWindow和onDetachedFromWindow-源码解析/" style="font-size: 10px;">onAttachedToWindow和onDetachedFromWindow,源码解析</a> <a href="/tags/内存优化/" style="font-size: 10px;">内存优化</a> <a href="/tags/查看git-bash内容/" style="font-size: 10px;">查看git bash内容</a>
+        <a href="/tags/Android-DeepLink-源码解析/" style="font-size: 10px;">Android DeepLink 源码解析</a> <a href="/tags/Android-JNI开发/" style="font-size: 10px;">Android JNI开发</a> <a href="/tags/Android-NDK开发，JNI开发/" style="font-size: 20px;">Android NDK开发，JNI开发</a> <a href="/tags/Android学习/" style="font-size: 10px;">Android学习</a> <a href="/tags/AppLinks-DeepLinks/" style="font-size: 10px;">AppLinks, DeepLinks</a> <a href="/tags/Dex类加载/" style="font-size: 10px;">Dex类加载</a> <a href="/tags/Hexo学习/" style="font-size: 10px;">Hexo学习</a> <a href="/tags/Hexo搭建/" style="font-size: 10px;">Hexo搭建</a> <a href="/tags/RoboBinding-MVC-MVP/" style="font-size: 10px;">RoboBinding,MVC,MVP</a> <a href="/tags/SharedPreferences-Editor/" style="font-size: 10px;">SharedPreferences Editor</a> <a href="/tags/View-onMeasure/" style="font-size: 10px;">View onMeasure</a> <a href="/tags/adb命令/" style="font-size: 10px;">adb命令</a> <a href="/tags/adb查看交互Activity名称/" style="font-size: 10px;">adb查看交互Activity名称</a> <a href="/tags/gradle配置/" style="font-size: 10px;">gradle配置</a> <a href="/tags/onAttachedToWindow和onDetachedFromWindow-源码解析/" style="font-size: 10px;">onAttachedToWindow和onDetachedFromWindow,源码解析</a> <a href="/tags/onSaveInstanceState/" style="font-size: 10px;">onSaveInstanceState</a> <a href="/tags/内存优化/" style="font-size: 10px;">内存优化</a> <a href="/tags/应用内部广播-LocalBroadcastManager/" style="font-size: 10px;">应用内部广播,LocalBroadcastManager</a> <a href="/tags/查看git-bash内容/" style="font-size: 10px;">查看git bash内容</a> <a href="/tags/深度学习-吴恩达/" style="font-size: 10px;">深度学习 吴恩达</a>
     </div>
   </div>
 
@@ -384,6 +378,8 @@ AsyncTask的使用方法比较简单，无非是创建一个Asyn...
         <div class="content friends-link">
         
             <a href="http://blog.csdn.net/hty1053240123?viewmode=contents" class="fa" target="_blank">个人博客</a>
+        
+            <a href="https://www.jianshu.com/u/3c8a983c71dc" class="fa" target="_blank">简书</a>
         
         </div>
     </div>

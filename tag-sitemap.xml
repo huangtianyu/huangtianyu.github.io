@@ -23,13 +23,6 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/tags/Android%E5%AD%A6%E4%B9%A0/</loc>
-        <lastmod>2018-01-03T14:36:10.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://yoursite.com/tags/%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/</loc>
         <lastmod>2018-01-03T15:41:49.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -67,6 +60,83 @@
     <url>
         <loc>http://yoursite.com/tags/onAttachedToWindow%E5%92%8ConDetachedFromWindow-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
         <lastmod>2018-01-09T15:06:58.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/%E5%BA%94%E7%94%A8%E5%86%85%E9%83%A8%E5%B9%BF%E6%92%AD-LocalBroadcastManager/</loc>
+        <lastmod>2018-01-17T15:06:13.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/adb%E5%91%BD%E4%BB%A4/</loc>
+        <lastmod>2018-01-17T15:06:13.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/SharedPreferences-Editor/</loc>
+        <lastmod>2018-01-17T15:06:13.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/Android%E5%AD%A6%E4%B9%A0/</loc>
+        <lastmod>2018-01-18T13:51:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/Android-DeepLink-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+        <lastmod>2018-01-18T13:51:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/onSaveInstanceState/</loc>
+        <lastmod>2018-01-19T16:18:59.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/AppLinks-DeepLinks/</loc>
+        <lastmod>2018-01-22T13:27:22.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/Android-NDK%E5%BC%80%E5%8F%91%EF%BC%8CJNI%E5%BC%80%E5%8F%91/</loc>
+        <lastmod>2018-02-07T14:39:12.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/Android-JNI%E5%BC%80%E5%8F%91/</loc>
+        <lastmod>2018-02-07T14:39:12.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/gradle%E9%85%8D%E7%BD%AE/</loc>
+        <lastmod>2018-02-07T14:39:12.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%90%B4%E6%81%A9%E8%BE%BE/</loc>
+        <lastmod>2018-02-07T14:39:12.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
